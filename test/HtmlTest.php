@@ -3,8 +3,8 @@ use Coroq\Html;
 
 class HtmlTest extends PHPUnit_Framework_TestCase
 {
-  const specials = "&<>";
-  const escaped = "&amp;&lt;&gt;";
+  const specials = "&<>'\"";
+  const escaped = "&amp;&lt;&gt;&#039;&quot;";
 
   /**
    * @covers Coroq\Html::escape

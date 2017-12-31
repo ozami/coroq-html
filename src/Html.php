@@ -1,7 +1,7 @@
 <?php
 namespace Coroq;
 
-class Html
+class Html implements HtmlInterface
 {
   const AUTO_CLOSE = "auto";
   const CLOSE = "close";
@@ -58,7 +58,7 @@ class Html
         $html[] = $name;
       }
       else {
-        $html[] = $name . '="' . htmlspecialchars("$value", ENT_QUOTES, "UTF-8") . '"';
+        $html[] = $name . '="' . static::escape("$value") . '"';
       }
     }
     return join(" ", $html);
@@ -190,12 +190,12 @@ class Html
 
   public static function escape($s)
   {
-    if ($s instanceof self) {
+    if ($s instanceof HtmlInterface) {
       return "$s";
     }
     if (!preg_match("##u", $s)) {
       throw new \InvalidArgumentException();
     }
-    return htmlspecialchars("$s", ENT_NOQUOTES, "UTF-8");
+    return htmlspecialchars("$s", ENT_QUOTES, "UTF-8");
   }
 }

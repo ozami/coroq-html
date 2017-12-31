@@ -47,7 +47,7 @@ class Html
   {
     $html = [];
     foreach ($this->_attributes as $name => $value) {
-      if (value === false || $value === null) {
+      if ($value === false || $value === null) {
         // ignore
       }
       elseif ($value === true) {

@@ -19,8 +19,18 @@ class Script extends \Coroq\Html
     if (!preg_match("#^[a-zA-Z_][a-zA-Z0-9_]*$#", $name)) {
       throw new \InvalidArgumentException();
     }
-    $encoded = base64_encode(json_encode($value, JSON_UNESCAPED_UNICODE));
-    $code = "var $name = JSON.parse(atob('$encoded'));";
+    $code = "var $name = " . static::bridgeData($value) . ";";
     return $this->append($code);
+  }
+
+  public static function bridgeData($value)
+  {
+    $json = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+      throw new \InvalidArgumentException();
+    }
+    $base64 = base64_encode($json);
+    $code = "JSON.parse(atob('$base64'))";
+    return $code;
   }
 }

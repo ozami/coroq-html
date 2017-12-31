@@ -3,17 +3,17 @@ use Coroq\Html;
 
 class HtmlTest extends PHPUnit_Framework_TestCase
 {
-  const specials = "&<>'\"";
-  const escaped = "&amp;&lt;&gt;&#039;&quot;";
+  const specials = "&<>";
+  const escaped = "&amp;&lt;&gt;";
 
   /**
    * @covers Coroq\Html::escape
    */
   public function testEscape()
   {
-    foreach (["", null, "&", "<", ">", "'", '"', "あ", "a"] as $s) {
+    foreach (["", null, "&", "<", ">", "あ", "a"] as $s) {
       $this->assertSame(
-        htmlspecialchars($s, ENT_QUOTES),
+        htmlspecialchars($s, ENT_QUOTES, "UTF-8"),
         Html::escape($s)
       );
     }

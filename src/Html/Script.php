@@ -1,7 +1,7 @@
 <?php
 namespace Coroq\Html;
 
-class Script
+class Script extends \Coroq\Html
 {
   public function __construct()
   {
@@ -19,8 +19,8 @@ class Script
     if (!preg_match("#^[a-zA-Z_][a-zA-Z0-9_]*$#", $name)) {
       throw new \InvalidArgumentException();
     }
-    $encoded = rawurlencode(json_encode($value, JSON_UNESCAPED_UNICODE));
-    $code = "var $name = JSON.parse(decodeURIComponent('$encoded'));";
-    return $this->content($code);
+    $encoded = base64_encode(json_encode($value, JSON_UNESCAPED_UNICODE));
+    $code = "var $name = JSON.parse(atob('$encoded'));";
+    return $this->append($code);
   }
 }

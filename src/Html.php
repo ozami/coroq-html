@@ -58,7 +58,7 @@ class Html
         $html[] = $name;
       }
       else {
-        $html[] = $name . '="' . static::escape($value) . '"';
+        $html[] = $name . '="' . htmlspecialchars("$value", ENT_QUOTES, "UTF-8") . '"';
       }
     }
     return join(" ", $html);
@@ -196,6 +196,6 @@ class Html
     if (!preg_match("##u", $s)) {
       throw new \InvalidArgumentException();
     }
-    return htmlspecialchars("$s", ENT_QUOTES, "UTF-8");
+    return htmlspecialchars("$s", ENT_NOQUOTES, "UTF-8");
   }
 }

@@ -13,6 +13,10 @@ class Html
   public $_attributes = [];
   public $_close = self::AUTO_CLOSE;
 
+  public function __construct()
+  {
+  }
+
   public function __toString()
   {
     if ($this->_tag == "") {
@@ -92,6 +96,11 @@ class Html
     }
     $this->_tag = $tag;
     return $this;
+  }
+  
+  public function getTag()
+  {
+    return $this->_tag;
   }
 
   public function attr($name, $value)

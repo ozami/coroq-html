@@ -20,7 +20,7 @@ class Br extends \Coroq\Html
         $children[] = array_shift($parts);
         foreach ($parts as $p) {
           $children[] = new Br();
-          $children[] = $p;
+          $children[] = "\n$p";
         }
       }
       return $children;

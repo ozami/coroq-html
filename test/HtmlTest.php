@@ -81,4 +81,42 @@ class HtmlTest extends PHPUnit_Framework_TestCase
       (new Html())->tag("p")->append(self::specials)->__toString()
     );
   }
+  
+  /**
+   * @covers Coroq\Html::tag
+   */
+  public function testTagCanSetTag()
+  {
+    $this->assertSame(
+      "test",
+      (new Html())->tag("test")->getTag()
+    );
+  }
+  
+  /**
+   * @covers Coroq\Html::tag
+   */
+  public function testTagCanUnSetTag()
+  {
+    $this->assertSame(
+      "",
+      (new Html())->tag("test")->tag("")->getTag()
+    );
+  }
+  
+  /**
+   * @covers Coroq\Html::tag
+   */
+  public function testTagThrowsExceptionForInvalidTagName()
+  {
+    foreach (str_split("!\"#$%&'()=^~\\|@`[{}];+*,<>/?\r\n\t ") as $c) {
+      try {
+        (new Html())->tag($c);
+        $this->fail("Could not ban '$c'");
+      }
+      catch (\Exception $e) {
+        $this->assertTrue($e instanceof \InvalidArgumentException);
+      }
+    }
+  }
 }

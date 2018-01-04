@@ -27,6 +27,6 @@ class Option extends \Coroq\Html
   
   public function selected($selected = true)
   {
-    return $this->attr($selected);
+    return $this->attr("selected", $selected);
   }
 }

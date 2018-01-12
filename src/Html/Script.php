@@ -25,7 +25,7 @@ class Script extends \Coroq\Html
 
   public static function bridgeCode($value)
   {
-    $json = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    $json = json_encode($value);
     if ($json === false) {
       throw new \InvalidArgumentException();
     }

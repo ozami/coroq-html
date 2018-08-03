@@ -175,7 +175,7 @@ class Html implements HtmlInterface
       "param", "source", "track", "wbr",
     ];
     if (in_array($this->_tag, $empties)) {
-      return self::SELF_CLOSE;
+      return self::NO_CLOSE;
     }
     return self::CLOSE;
   }

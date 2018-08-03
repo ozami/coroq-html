@@ -56,7 +56,7 @@ class HtmlTest extends PHPUnit_Framework_TestCase
   {
     $this->assertSame(
       "<br />",
-      (new Html())->tag("br")->__toString()
+      (new Html())->tag("br")->close(Html::SELF_CLOSE)->__toString()
     );
   }
 
@@ -66,7 +66,7 @@ class HtmlTest extends PHPUnit_Framework_TestCase
   public function test__toStringCanConstructTagWithAttributes()
   {
     $this->assertSame(
-      '<br id="test" clear="both" />',
+      '<br id="test" clear="both">',
       (new Html())->tag("br")->id("test")->attr("clear", "both")->__toString()
     );
   }

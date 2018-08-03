@@ -13,7 +13,7 @@ class BrTest extends PHPUnit_Framework_TestCase
     $h = new Html();
     $h->append($text);
     $this->assertSame(
-      nl2br($text),
+      nl2br($text, false),
       (string)Br::nl2br($h)
     );
   }
@@ -28,7 +28,7 @@ class BrTest extends PHPUnit_Framework_TestCase
     $h->append($text);
     $h->append($text);
     $this->assertSame(
-      nl2br($text . $text),
+      nl2br($text . $text, false),
       (string)Br::nl2br($h)
     );
   }
@@ -44,7 +44,7 @@ class BrTest extends PHPUnit_Framework_TestCase
     $h->append((new Html())->tag("p")->append($text));
     $h->append($text);
     $this->assertSame(
-      nl2br("$text<p>$text</p>$text"),
+      nl2br("$text<p>$text</p>$text", false),
       (string)Br::nl2br($h)
     );
   }

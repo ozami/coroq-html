@@ -8,15 +8,22 @@ class Html implements HtmlInterface
   const NO_CLOSE = "no";
   const SELF_CLOSE = "self";
 
+  /** @var string */
   public $_tag = "";
+  /** @var array */
   public $_children = [];
+  /** @var array */
   public $_attributes = [];
+  /** @var string */
   public $_close = self::AUTO_CLOSE;
 
   public function __construct()
   {
   }
 
+  /**
+   * @return string
+   */
   public function __toString()
   {
     if ($this->_tag == "") {
@@ -40,6 +47,9 @@ class Html implements HtmlInterface
     return $html;
   }
 
+  /**
+   * @return string
+   */
   public function getEscapedChildren()
   {
     return array_reduce($this->_children, function($html, $child) {
@@ -47,6 +57,9 @@ class Html implements HtmlInterface
     }, "");
   }
 
+  /**
+   * @return string
+   */
   public function getEscapedAttributes()
   {
     $html = [];
@@ -64,29 +77,48 @@ class Html implements HtmlInterface
     return join(" ", $html);
   }
 
+  /**
+   * @param array $children
+   * @return Html
+   */
   public function children(array $children)
   {
     $this->_children = $children;
     return $this;
   }
 
+  /**
+   * @param mixed $content
+   * @return Html
+   */
   public function append($content)
   {
     $this->_children[] = $content;
     return $this;
   }
 
+  /**
+   * @param mixed $content
+   * @return Html
+   */
   public function prepend($content)
   {
     array_unshift($this->_children, $content);
     return $this;
   }
   
+  /**
+   * @return array
+   */
   public function getChildren()
   {
     return $this->_children;
   }
 
+  /**
+   * @param string $tag
+   * @return Html
+   */
   public function tag($tag)
   {
     $tag = "$tag";
@@ -98,11 +130,19 @@ class Html implements HtmlInterface
     return $this;
   }
   
+  /**
+   * @return string
+   */
   public function getTag()
   {
     return $this->_tag;
   }
 
+  /**
+   * @param string $name
+   * @param mixed $value
+   * @return Html
+   */
   public function attr($name, $value)
   {
     $name = "$name";
@@ -117,6 +157,10 @@ class Html implements HtmlInterface
     return $this;
   }
 
+  /**
+   * @param array $attributes
+   * @return Html
+   */
   public function attrs(array $attributes)
   {
     foreach ($attributes as $name => $value) {
@@ -125,26 +169,46 @@ class Html implements HtmlInterface
     return $this;
   }
   
+  /**
+   * @param string $name
+   * @return mixed
+   */
   public function getAttr($name)
   {
     return @$this->_attributes[$name];
   }
   
+  /**
+   * @return array
+   */
   public function getAttrs()
   {
     return $this->_attributes;
   }
 
+  /**
+   * @param mixed $id
+   * @return Html
+   */
   public function id($id)
   {
     return $this->attr("id", $id);
   }
 
+  /**
+   * @param string $name
+   * @param mixed $value
+   * @return Html
+   */
   public function style($name, $value)
   {
     return $this->attr("style", ltrim(@$this->_attributes["style"] . " $name: $value;"));
   }
 
+  /**
+   * @param array $styles
+   * @return Html
+   */
   public function styles(array $styles)
   {
     foreach ($styles as $name => $value) {
@@ -153,17 +217,28 @@ class Html implements HtmlInterface
     return $this;
   }
 
+  /**
+   * @param string $class_name
+   * @return Html
+   */
   public function addClass($class_name)
   {
     return $this->attr("class", ltrim(@$this->_attributes["class"] . " $class_name"));
   }
 
+  /**
+   * @param string $close
+   * @return Html
+   */
   public function close($close)
   {
     $this->_close = $close;
     return $this;
   }
 
+  /**
+   * @return string
+   */
   public function calcClose()
   {
     if ($this->_close != self::AUTO_CLOSE) {
@@ -180,6 +255,11 @@ class Html implements HtmlInterface
     return self::CLOSE;
   }
   
+  /**
+   * @param callable $callable
+   * @param mixed $args optional
+   * @return Html
+   */
   public function call($callable)
   {
     $args = func_get_args();
@@ -188,6 +268,10 @@ class Html implements HtmlInterface
     return $this;
   }
 
+  /**
+   * @param mixed $s
+   * @return string
+   */
   public static function escape($s)
   {
     if ($s instanceof HtmlInterface) {

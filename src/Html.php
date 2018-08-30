@@ -257,7 +257,7 @@ class Html implements HtmlInterface
   
   /**
    * @param callable $callable
-   * @param mixed $args optional
+   * @param mixed $args... optional
    * @return Html
    */
   public function call($callable)

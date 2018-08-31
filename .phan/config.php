@@ -3,7 +3,11 @@
 return [
   "directory_list" => [
     "src",
+    "test",
+    "vendor",
   ],
-  "progress_bar" => true,
+  "exclude_analysis_directory_list" => [
+    "vendor",
+  ],
   "backward_compatibility_checks" => true,
 ];

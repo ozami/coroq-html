@@ -1,6 +1,5 @@
 <?php
 use Coroq\Html\Script;
-use Coroq\Html;
 
 class ScriptTest extends PHPUnit_Framework_TestCase
 {

@@ -227,6 +227,33 @@ class Html implements HtmlInterface
   }
 
   /**
+   * @param string $value
+   * @return $this
+   */
+  public function autocomplete($value)
+  {
+    return $this->attr("autocomplete", $value);
+  }
+
+  /**
+   * @param string $value
+   * @return $this
+   */
+  public function placeholder($value)
+  {
+    return $this->attr("placeholder", $value);
+  }
+
+  /**
+   * @param string $value
+   * @return $this
+   */
+  public function rows($value)
+  {
+    return $this->attr("rows", $value);
+  }
+
+  /**
    * @param string $close
    * @return Html
    */

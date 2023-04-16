@@ -1,8 +1,9 @@
 <?php
 use Coroq\Html\Br;
 use Coroq\Html;
+use PHPUnit\Framework\TestCase;
 
-class BrTest extends PHPUnit_Framework_TestCase
+class BrTest extends TestCase
 {
   /**
    * @covers Coroq\Html\Br::nl2br

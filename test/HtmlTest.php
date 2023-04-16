@@ -1,7 +1,8 @@
 <?php
 use Coroq\Html;
+use PHPUnit\Framework\TestCase;
 
-class HtmlTest extends PHPUnit_Framework_TestCase
+class HtmlTest extends TestCase
 {
   const specials = "&<>'\"";
   const escaped = "&amp;&lt;&gt;&#039;&quot;";

@@ -1,7 +1,8 @@
 <?php
 use Coroq\Html\Script;
+use PHPUnit\Framework\TestCase;
 
-class ScriptTest extends PHPUnit_Framework_TestCase
+class ScriptTest extends TestCase
 {
   /**
    * @covers Coroq\Html\Script::bridge

@@ -1,7 +1,9 @@
 <?php
-namespace Coroq\Html;
+namespace Coroq\Html\Tag;
 
-class Option extends \Coroq\Html
+use Coroq\Html\Html;
+
+class Option extends Html
 {
   public function __construct($label = null, $value = null)
   {

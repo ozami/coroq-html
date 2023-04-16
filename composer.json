@@ -17,10 +17,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Coroq\\": "src/"
+            "Coroq\\Html\\": "src/"
         },
         "files": [
-            "src/Html/shorthands.php"
+            "src/shorthands.php"
         ]
     },
     "scripts": {

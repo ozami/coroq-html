@@ -1,13 +1,13 @@
 <?php
-use Coroq\Html\Br;
-use Coroq\Html;
+use Coroq\Html\Html;
+use Coroq\Html\Tag\Br;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers Coroq\Html\Tag\Br
+ */
 class BrTest extends TestCase
 {
-  /**
-   * @covers Coroq\Html\Br::nl2br
-   */
   public function testNl2BrCanProcessSingleChild()
   {
     $text = "\ntest\ntest\n\ntest\n";
@@ -19,9 +19,6 @@ class BrTest extends TestCase
     );
   }
   
-  /**
-   * @covers Coroq\Html\Br::nl2br
-   */
   public function testNl2BrCanProcessMultipleChild()
   {
     $text = "\ntest\ntest\n\ntest\n";
@@ -34,9 +31,6 @@ class BrTest extends TestCase
     );
   }
   
-  /**
-   * @covers Coroq\Html\Br::nl2br
-   */
   public function testNl2BrCanProcessRecursively()
   {
     $text = "\ntest\ntest\n\ntest\n";

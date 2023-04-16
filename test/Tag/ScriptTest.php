@@ -1,12 +1,12 @@
 <?php
-use Coroq\Html\Script;
+use Coroq\Html\Tag\Script;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers Coroq\Html\Tag\Script
+ */
 class ScriptTest extends TestCase
 {
-  /**
-   * @covers Coroq\Html\Script::bridge
-   */
   public function testBridgeCanEncodeScalarValue()
   {
     foreach (["text", 1, false, null] as $value) {

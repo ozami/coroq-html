@@ -1,7 +1,9 @@
 <?php
-namespace Coroq\Html;
+namespace Coroq\Html\Tag;
 
-class Script extends \Coroq\Html
+use Coroq\Html\Html;
+
+class Script extends Html
 {
   public function __construct()
   {

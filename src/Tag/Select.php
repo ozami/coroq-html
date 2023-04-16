@@ -1,7 +1,9 @@
 <?php
-namespace Coroq\Html;
+namespace Coroq\Html\Tag;
 
-class Select extends \Coroq\Html
+use Coroq\Html\Html;
+
+class Select extends Html
 {
   public function __construct()
   {

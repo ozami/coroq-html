@@ -1,7 +1,9 @@
 <?php
-namespace Coroq\Html;
+namespace Coroq\Html\Tag;
 
-class NoEscape implements \Coroq\HtmlInterface
+use Coroq\Html\HtmlInterface;
+
+class NoEscape implements HtmlInterface
 {
   public $_text;
   

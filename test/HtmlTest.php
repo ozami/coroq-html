@@ -1,15 +1,15 @@
 <?php
-use Coroq\Html;
+use Coroq\Html\Html;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers Coroq\Html\Html
+ */
 class HtmlTest extends TestCase
 {
   const specials = "&<>'\"";
   const escaped = "&amp;&lt;&gt;&#039;&quot;";
 
-  /**
-   * @covers Coroq\Html::escape
-   */
   public function testEscape()
   {
     foreach (["", null, "&", "<", ">", "あ", "a"] as $s) {
@@ -20,17 +20,11 @@ class HtmlTest extends TestCase
     }
   }
   
-  /**
-   * @covers Coroq\Html::__toString
-   */
   public function test__toStringCanEscapeEmptyString()
   {
     $this->assertSame("", (new Html())->__toString());
   }
   
-  /**
-   * @covers Coroq\Html::__toString
-   */
   public function test__toStringCanEscapeSpecialCharacters()
   {
     $this->assertSame(
@@ -39,9 +33,6 @@ class HtmlTest extends TestCase
     );
   }
   
-  /**
-   * @covers Coroq\Html::__toString
-   */
   public function test__toStringCanConstructTag()
   {
     $this->assertSame(
@@ -50,9 +41,6 @@ class HtmlTest extends TestCase
     );
   }
   
-  /**
-   * @covers Coroq\Html::__toString
-   */
   public function test__toStringCanConstructSelfCloseTag()
   {
     $this->assertSame(
@@ -61,9 +49,6 @@ class HtmlTest extends TestCase
     );
   }
 
-  /**
-   * @covers Coroq\Html::__toString
-   */
   public function test__toStringCanConstructTagWithAttributes()
   {
     $this->assertSame(
@@ -72,9 +57,6 @@ class HtmlTest extends TestCase
     );
   }
 
-  /**
-   * @covers Coroq\Html::__toString
-   */
   public function test__toStringCanConstructTagContainsText()
   {
     $this->assertSame(
@@ -83,9 +65,6 @@ class HtmlTest extends TestCase
     );
   }
   
-  /**
-   * @covers Coroq\Html::tag
-   */
   public function testTagCanSetTag()
   {
     $this->assertSame(
@@ -94,9 +73,6 @@ class HtmlTest extends TestCase
     );
   }
   
-  /**
-   * @covers Coroq\Html::tag
-   */
   public function testTagCanUnSetTag()
   {
     $this->assertSame(
@@ -105,9 +81,6 @@ class HtmlTest extends TestCase
     );
   }
   
-  /**
-   * @covers Coroq\Html::tag
-   */
   public function testTagThrowsExceptionForInvalidTagName()
   {
     foreach (str_split("!\"#$%&'()=^~\\|@`[{}];+*,<>/?\r\n\t ") as $c) {

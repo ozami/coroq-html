@@ -1,7 +1,9 @@
 <?php
-namespace Coroq\Html;
+namespace Coroq\Html\Tag;
 
-class Input extends \Coroq\Html
+use Coroq\Html\Html;
+
+class Input extends Html
 {
   public function __construct()
   {

@@ -1,5 +1,5 @@
 <?php
-namespace Coroq;
+namespace Coroq\Html;
 
 interface HtmlInterface
 {

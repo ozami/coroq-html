@@ -1,7 +1,9 @@
 <?php
-namespace Coroq\Html;
+namespace Coroq\Html\Tag;
 
-class Br extends \Coroq\Html
+use Coroq\Html\Html;
+
+class Br extends Html
 {
   public function __construct()
   {
@@ -9,10 +11,10 @@ class Br extends \Coroq\Html
     $this->tag("br");
   }
 
-  public static function nl2br(\Coroq\Html $html)
+  public static function nl2br(Html $html)
   {
     $children = array_reduce($html->getChildren(), function($children, $child) {
-      if ($child instanceof \Coroq\Html) {
+      if ($child instanceof Html) {
         $children[] = static::nl2br($child);
       }
       else {

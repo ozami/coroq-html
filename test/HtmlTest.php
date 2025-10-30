@@ -201,4 +201,89 @@ class HtmlTest extends TestCase
       $html->__toString()
     );
   }
+
+  public function testWhenExecutesCallbackWhenTrue()
+  {
+    $html = (new Html())
+      ->tag("div")
+      ->when(true, function($el) {
+        $el->addClass("active");
+      });
+    $this->assertSame(
+      '<div class="active"></div>',
+      $html->__toString()
+    );
+  }
+
+  public function testWhenSkipsCallbackWhenFalse()
+  {
+    $html = (new Html())
+      ->tag("div")
+      ->when(false, function($el) {
+        $el->addClass("active");
+      });
+    $this->assertSame(
+      '<div></div>',
+      $html->__toString()
+    );
+  }
+
+  public function testWhenCanChain()
+  {
+    $isAdmin = true;
+    $isPremium = false;
+    $html = (new Html())
+      ->tag("a")
+      ->attr("href", "/profile")
+      ->when($isAdmin, function($el) {
+        $el->addClass("admin-link");
+      })
+      ->when($isPremium, function($el) {
+        $el->addClass("premium-badge");
+      })
+      ->append("Profile");
+    $this->assertSame(
+      '<a href="/profile" class="admin-link">Profile</a>',
+      $html->__toString()
+    );
+  }
+
+  public function testWhenWithMultipleOperations()
+  {
+    $html = (new Html())
+      ->tag("button")
+      ->when(true, function($el) {
+        $el->addClass("btn")->addClass("btn-primary")->data("role", "submit");
+      });
+    $this->assertSame(
+      '<button class="btn btn-primary" data-role="submit"></button>',
+      $html->__toString()
+    );
+  }
+
+  public function testWhenReturnsThis()
+  {
+    $html = (new Html())->tag("div");
+    $result = $html->when(true, function($el) {
+      $el->addClass("test");
+    });
+    $this->assertSame($html, $result);
+  }
+
+  public function testWhenWithDynamicCondition()
+  {
+    $userRole = "admin";
+    $html = (new Html())
+      ->tag("nav")
+      ->when($userRole === "admin", function($el) {
+        $el->append((new Html())->tag("a")->attr("href", "/admin")->append("Admin Panel"));
+      })
+      ->when($userRole === "user", function($el) {
+        $el->append((new Html())->tag("a")->attr("href", "/dashboard")->append("Dashboard"));
+      });
+    $this->assertSame(
+      '<nav><a href="/admin">Admin Panel</a></nav>',
+      $html->__toString()
+    );
+  }
 }

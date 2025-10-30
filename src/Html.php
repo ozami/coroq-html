@@ -308,6 +308,21 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Execute callback if condition is true
+   *
+   * @param bool $condition The condition to check
+   * @param callable $callback Function to execute if true, receives $this as first argument
+   * @return Html
+   */
+  public function when($condition, $callback)
+  {
+    if ($condition) {
+      return $this->call($callback);
+    }
+    return $this;
+  }
+
+  /**
    * Wraps this element with another Html element
    *
    * @param Html|null $wrapper The Html element to wrap this element with. If null, creates a new empty Html.

@@ -175,7 +175,7 @@ class Html implements HtmlInterface
    */
   public function getAttr($name)
   {
-    return @$this->_attributes[$name];
+    return $this->_attributes[$name] ?? null;
   }
   
   /**
@@ -202,7 +202,8 @@ class Html implements HtmlInterface
    */
   public function style($name, $value)
   {
-    return $this->attr("style", ltrim(@$this->_attributes["style"] . " $name: $value;"));
+    $existing = $this->_attributes["style"] ?? "";
+    return $this->attr("style", ltrim("$existing $name: $value;"));
   }
 
   /**
@@ -223,7 +224,8 @@ class Html implements HtmlInterface
    */
   public function addClass($class_name)
   {
-    return $this->attr("class", ltrim(@$this->_attributes["class"] . " $class_name"));
+    $existing = $this->_attributes["class"] ?? "";
+    return $this->attr("class", ltrim("$existing $class_name"));
   }
 
   /**

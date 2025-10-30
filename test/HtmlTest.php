@@ -152,4 +152,53 @@ class HtmlTest extends TestCase
       $result->__toString()
     );
   }
+
+  public function testDataSetsDataAttribute()
+  {
+    $this->assertSame(
+      '<div data-user-id="123"></div>',
+      (new Html())->tag("div")->data("user-id", 123)->__toString()
+    );
+  }
+
+  public function testDataWithMultipleAttributes()
+  {
+    $html = (new Html())
+      ->tag("div")
+      ->data("user-id", 123)
+      ->data("role", "admin")
+      ->data("status", "active");
+    $this->assertSame(
+      '<div data-user-id="123" data-role="admin" data-status="active"></div>',
+      $html->__toString()
+    );
+  }
+
+  public function testDataWithBooleanValue()
+  {
+    $html = (new Html())
+      ->tag("div")
+      ->data("active", true);
+    $this->assertSame(
+      '<div data-active></div>',
+      $html->__toString()
+    );
+  }
+
+  public function testDataEscapesValue()
+  {
+    $this->assertSame(
+      '<div data-content="' . self::escaped . '"></div>',
+      (new Html())->tag("div")->data("content", self::specials)->__toString()
+    );
+  }
+
+  public function testDataCanChain()
+  {
+    $html = (new Html())->tag("button")->data("action", "submit")->addClass("btn");
+    $this->assertSame(
+      '<button data-action="submit" class="btn"></button>',
+      $html->__toString()
+    );
+  }
 }

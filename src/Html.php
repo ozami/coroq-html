@@ -227,6 +227,18 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Set data attribute
+   *
+   * @param string $name Attribute name (without 'data-' prefix)
+   * @param mixed $value Attribute value
+   * @return Html
+   */
+  public function data($name, $value)
+  {
+    return $this->attr("data-$name", $value);
+  }
+
+  /**
    * @param string $value
    * @return $this
    */

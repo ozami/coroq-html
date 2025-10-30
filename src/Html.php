@@ -296,6 +296,20 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Wraps this element with another Html element
+   *
+   * @param Html|null $wrapper The Html element to wrap this element with. If null, creates a new empty Html.
+   * @return Html The wrapper element (with this element as child)
+   */
+  public function wrap(Html $wrapper = null)
+  {
+    if ($wrapper === null) {
+      $wrapper = new Html();
+    }
+    return $wrapper->append($this);
+  }
+
+  /**
    * @param mixed $s
    * @return string
    */

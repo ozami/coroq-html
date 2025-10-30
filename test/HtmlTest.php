@@ -93,4 +93,63 @@ class HtmlTest extends TestCase
       }
     }
   }
+
+  public function testWrapWithNullCreatesEmptyWrapper()
+  {
+    $inner = (new Html())->tag("span")->append("Text");
+    $result = $inner->wrap(null);
+    $this->assertSame(
+      "<span>Text</span>",
+      $result->__toString()
+    );
+  }
+
+  public function testWrapWithConfiguredWrapper()
+  {
+    $inner = (new Html())->tag("span")->append("Text");
+    $wrapper = (new Html())->tag("div")->addClass("container");
+    $result = $inner->wrap($wrapper);
+    $this->assertSame(
+      '<div class="container"><span>Text</span></div>',
+      $result->__toString()
+    );
+  }
+
+  public function testWrapReturnsWrapper()
+  {
+    $inner = (new Html())->tag("span")->append("Text");
+    $wrapper = (new Html())->tag("div");
+    $result = $inner->wrap($wrapper);
+    $this->assertSame($wrapper, $result);
+  }
+
+  public function testWrapCanChainOnWrapper()
+  {
+    $inner = (new Html())->tag("span")->append("Text");
+    $result = $inner->wrap((new Html())->tag("div"))->addClass("test");
+    $this->assertSame(
+      '<div class="test"><span>Text</span></div>',
+      $result->__toString()
+    );
+  }
+
+  public function testWrapWithEmptyWrapper()
+  {
+    $inner = (new Html())->tag("p")->append("Content");
+    $result = $inner->wrap((new Html())->tag("section"));
+    $this->assertSame(
+      '<section><p>Content</p></section>',
+      $result->__toString()
+    );
+  }
+
+  public function testWrapPreservesInnerElementAttributes()
+  {
+    $inner = (new Html())->tag("a")->attr("href", "#")->append("Link");
+    $result = $inner->wrap((new Html())->tag("li"));
+    $this->assertSame(
+      '<li><a href="#">Link</a></li>',
+      $result->__toString()
+    );
+  }
 }

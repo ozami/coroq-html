@@ -286,4 +286,54 @@ class HtmlTest extends TestCase
       $html->__toString()
     );
   }
+
+  public function testApplyExecutesCallback()
+  {
+    $html = (new Html())
+      ->tag("div")
+      ->apply(function($el) {
+        $el->addClass("applied");
+      });
+    $this->assertSame(
+      '<div class="applied"></div>',
+      $html->__toString()
+    );
+  }
+
+  public function testApplyWithExtraArguments()
+  {
+    $html = (new Html())
+      ->tag("div")
+      ->apply(function($el, $width, $color) {
+        $el->data("width", $width)->data("color", $color);
+      }, 2, "red");
+    $this->assertSame(
+      '<div data-width="2" data-color="red"></div>',
+      $html->__toString()
+    );
+  }
+
+  public function testApplyReturnsThis()
+  {
+    $html = (new Html())->tag("div");
+    $result = $html->apply(function($el) {
+      $el->addClass("test");
+    });
+    $this->assertSame($html, $result);
+  }
+
+  public function testApplyWithNamedFunction()
+  {
+    $makeButton = function($el) {
+      $el->addClass("btn")->addClass("btn-primary")->attr("type", "button");
+    };
+    $html = (new Html())
+      ->tag("button")
+      ->apply($makeButton)
+      ->append("Click");
+    $this->assertSame(
+      '<button class="btn btn-primary" type="button">Click</button>',
+      $html->__toString()
+    );
+  }
 }

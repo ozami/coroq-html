@@ -299,10 +299,10 @@ class Html implements HtmlInterface
    * @param mixed $args... optional
    * @return Html
    */
-  public function call($callable)
+  public function apply($callable)
   {
     $args = func_get_args();
-    array_unshift($args, $this);
+    $args[0] = $this;
     call_user_func_array($callable, $args);
     return $this;
   }
@@ -317,7 +317,7 @@ class Html implements HtmlInterface
   public function when($condition, $callback)
   {
     if ($condition) {
-      return $this->call($callback);
+      return $this->apply($callback);
     }
     return $this;
   }

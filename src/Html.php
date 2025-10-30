@@ -323,6 +323,21 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Iterate over items and execute callback for each
+   *
+   * @param iterable $items The items to iterate over
+   * @param callable $callback Function to execute for each item, receives ($this, $value, $key)
+   * @return Html
+   */
+  public function each($items, $callback)
+  {
+    foreach ($items as $key => $value) {
+      $callback($this, $value, $key);
+    }
+    return $this;
+  }
+
+  /**
    * Wraps this element with another Html element
    *
    * @param Html|null $wrapper The Html element to wrap this element with. If null, creates a new empty Html.

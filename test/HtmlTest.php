@@ -336,4 +336,110 @@ class HtmlTest extends TestCase
       $html->__toString()
     );
   }
+
+  public function testEachWithSimpleArray()
+  {
+    $items = ["Apple", "Banana", "Cherry"];
+    $html = (new Html())
+      ->tag("ul")
+      ->each($items, function($parent, $item) {
+        $parent->append((new Html())->tag("li")->append($item));
+      });
+    $this->assertSame(
+      '<ul><li>Apple</li><li>Banana</li><li>Cherry</li></ul>',
+      $html->__toString()
+    );
+  }
+
+  public function testEachWithAssociativeArray()
+  {
+    $items = ["name" => "John", "age" => "30", "city" => "NYC"];
+    $html = (new Html())
+      ->tag("dl")
+      ->each($items, function($parent, $value, $key) {
+        $parent->append((new Html())->tag("dt")->append($key));
+        $parent->append((new Html())->tag("dd")->append($value));
+      });
+    $this->assertSame(
+      '<dl><dt>name</dt><dd>John</dd><dt>age</dt><dd>30</dd><dt>city</dt><dd>NYC</dd></dl>',
+      $html->__toString()
+    );
+  }
+
+  public function testEachWithEmptyArray()
+  {
+    $html = (new Html())
+      ->tag("ul")
+      ->each([], function($parent, $item) {
+        $parent->append((new Html())->tag("li")->append($item));
+      });
+    $this->assertSame(
+      '<ul></ul>',
+      $html->__toString()
+    );
+  }
+
+  public function testEachReturnsThis()
+  {
+    $html = (new Html())->tag("ul");
+    $result = $html->each(["a", "b"], function($parent, $item) {
+      $parent->append((new Html())->tag("li")->append($item));
+    });
+    $this->assertSame($html, $result);
+  }
+
+  public function testEachCanChain()
+  {
+    $html = (new Html())
+      ->tag("ul")
+      ->addClass("list")
+      ->each(["Item 1", "Item 2"], function($parent, $item) {
+        $parent->append((new Html())->tag("li")->append($item));
+      })
+      ->id("main-list");
+    $this->assertSame(
+      '<ul class="list" id="main-list"><li>Item 1</li><li>Item 2</li></ul>',
+      $html->__toString()
+    );
+  }
+
+  public function testEachWithComplexStructure()
+  {
+    $users = [
+      ["name" => "Alice", "role" => "Admin"],
+      ["name" => "Bob", "role" => "User"],
+    ];
+    $html = (new Html())
+      ->tag("table")
+      ->each($users, function($parent, $user) {
+        $row = (new Html())
+          ->tag("tr")
+          ->append((new Html())->tag("td")->append($user["name"]))
+          ->append((new Html())->tag("td")->append($user["role"]));
+        $parent->append($row);
+      });
+    $this->assertSame(
+      '<table><tr><td>Alice</td><td>Admin</td></tr><tr><td>Bob</td><td>User</td></tr></table>',
+      $html->__toString()
+    );
+  }
+
+  public function testEachWithIndexAccess()
+  {
+    $items = ["First", "Second", "Third"];
+    $html = (new Html())
+      ->tag("ol")
+      ->each($items, function($parent, $item, $index) {
+        $parent->append(
+          (new Html())
+            ->tag("li")
+            ->data("index", $index)
+            ->append($item)
+        );
+      });
+    $this->assertSame(
+      '<ol><li data-index="0">First</li><li data-index="1">Second</li><li data-index="2">Third</li></ol>',
+      $html->__toString()
+    );
+  }
 }

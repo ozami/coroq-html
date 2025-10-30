@@ -25,8 +25,8 @@ class Input extends Html
   {
     return $this->attr("value", $value);
   }
-  
-  public function chacked($checked = true)
+
+  public function checked($checked = true)
   {
     return $this->attr("checked", $checked);
   }

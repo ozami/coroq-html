@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Coroq\Html;
 
 class Html implements HtmlInterface
@@ -354,17 +356,18 @@ class Html implements HtmlInterface
   }
 
   /**
-   * @param mixed $s
+   * @param mixed $anything
    * @return string
    */
-  public static function escape($s): string
+  public static function escape($anything): string
   {
-    if ($s instanceof HtmlInterface) {
-      return "$s";
+    $string = "$anything";
+    if ($anything instanceof HtmlInterface) {
+      return $string;
     }
-    if (!preg_match("##u", $s)) {
+    if (!preg_match("##u", $string)) {
       throw new \InvalidArgumentException();
     }
-    return htmlspecialchars("$s", ENT_QUOTES, "UTF-8");
+    return htmlspecialchars($string, ENT_QUOTES, "UTF-8");
   }
 }

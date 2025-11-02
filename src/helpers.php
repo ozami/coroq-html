@@ -9,7 +9,7 @@ use Coroq\Html\Html;
  * Create a <p> tag
  * @return Html
  */
-function para()
+function para(): Html
 {
   return (new Html())->tag('p');
 }
@@ -19,7 +19,7 @@ function para()
  * @param int $level Heading level (1-6)
  * @return Html
  */
-function heading($level = 1)
+function heading(int $level = 1): Html
 {
   return (new Html())->tag("h$level");
 }
@@ -28,7 +28,7 @@ function heading($level = 1)
  * Create a <h1> tag
  * @return Html
  */
-function h1()
+function h1(): Html
 {
   return (new Html())->tag('h1');
 }
@@ -37,7 +37,7 @@ function h1()
  * Create a <h2> tag
  * @return Html
  */
-function h2()
+function h2(): Html
 {
   return (new Html())->tag('h2');
 }
@@ -46,7 +46,7 @@ function h2()
  * Create a <h3> tag
  * @return Html
  */
-function h3()
+function h3(): Html
 {
   return (new Html())->tag('h3');
 }
@@ -55,7 +55,7 @@ function h3()
  * Create a <h4> tag
  * @return Html
  */
-function h4()
+function h4(): Html
 {
   return (new Html())->tag('h4');
 }
@@ -64,7 +64,7 @@ function h4()
  * Create a <h5> tag
  * @return Html
  */
-function h5()
+function h5(): Html
 {
   return (new Html())->tag('h5');
 }
@@ -73,7 +73,7 @@ function h5()
  * Create a <h6> tag
  * @return Html
  */
-function h6()
+function h6(): Html
 {
   return (new Html())->tag('h6');
 }
@@ -82,7 +82,7 @@ function h6()
  * Create a <div> tag
  * @return Html
  */
-function div()
+function div(): Html
 {
   return (new Html())->tag('div');
 }
@@ -91,7 +91,7 @@ function div()
  * Create a <span> tag
  * @return Html
  */
-function span()
+function span(): Html
 {
   return (new Html())->tag('span');
 }
@@ -102,12 +102,12 @@ function span()
  * @param string|null $target Target attribute value
  * @return Html
  */
-function a($href = null, $target = null)
+function a(?string $href = null, ?string $target = null): Html
 {
   return (new Html())
     ->tag('a')
-    ->when($href !== null, fn($el) => $el->attr('href', $href))
-    ->when($target !== null, fn($el) => $el->attr('target', $target));
+    ->when($href !== null, function($el) use ($href) { return $el->attr('href', $href); })
+    ->when($target !== null, function($el) use ($target) { return $el->attr('target', $target); });
 }
 
 /**
@@ -115,7 +115,7 @@ function a($href = null, $target = null)
  * @param string $type Button type (button, submit, reset)
  * @return Html
  */
-function button($type = 'button')
+function button(string $type = 'button'): Html
 {
   return (new Html())->tag('button')->attr('type', $type);
 }
@@ -126,19 +126,19 @@ function button($type = 'button')
  * @param string|null $name Name and id attributes
  * @return Html
  */
-function input($type = 'text', $name = null)
+function input(string $type = 'text', ?string $name = null): Html
 {
   return (new Html())
     ->tag('input')
     ->attr('type', $type)
-    ->when($name !== null, fn($el) => $el->attr('name', $name)->attr('id', $name));
+    ->when($name !== null, function($el) use ($name) { return $el->attr('name', $name)->attr('id', $name); });
 }
 
 /**
  * Create a <select> tag
  * @return Html
  */
-function select()
+function select(): Html
 {
   return (new Html())->tag('select');
 }
@@ -149,12 +149,12 @@ function select()
  * @param string|null $label Option label/text
  * @return Html
  */
-function option($value = null, $label = null)
+function option($value = null, $label = null): Html
 {
   return (new Html())
     ->tag('option')
-    ->when($value !== null, fn($el) => $el->attr('value', $value))
-    ->when($label !== null, fn($el) => $el->append($label));
+    ->when($value !== null, function($el) use ($value) { return $el->attr('value', $value); })
+    ->when($label !== null, function($el) use ($label) { return $el->append($label); });
 }
 
 /**
@@ -162,11 +162,11 @@ function option($value = null, $label = null)
  * @param string|null $name Name and id attributes
  * @return Html
  */
-function textarea($name = null)
+function textarea(?string $name = null): Html
 {
   return (new Html())
     ->tag('textarea')
-    ->when($name !== null, fn($el) => $el->attr('name', $name)->attr('id', $name));
+    ->when($name !== null, function($el) use ($name) { return $el->attr('name', $name)->attr('id', $name); });
 }
 
 /**
@@ -174,11 +174,11 @@ function textarea($name = null)
  * @param string|null $for For attribute (element id)
  * @return Html
  */
-function label($for = null)
+function label(?string $for = null): Html
 {
   return (new Html())
     ->tag('label')
-    ->when($for !== null, fn($el) => $el->attr('for', $for));
+    ->when($for !== null, function($el) use ($for) { return $el->attr('for', $for); });
 }
 
 /**
@@ -187,11 +187,11 @@ function label($for = null)
  * @param string $method Form method (get, post)
  * @return Html
  */
-function form($action = null, $method = 'post')
+function form(?string $action = null, string $method = 'post'): Html
 {
   return (new Html())
     ->tag('form')
-    ->when($action !== null, fn($el) => $el->attr('action', $action))
+    ->when($action !== null, function($el) use ($action) { return $el->attr('action', $action); })
     ->attr('method', $method);
 }
 
@@ -199,7 +199,7 @@ function form($action = null, $method = 'post')
  * Create a <ul> tag
  * @return Html
  */
-function ul()
+function ul(): Html
 {
   return (new Html())->tag('ul');
 }
@@ -208,7 +208,7 @@ function ul()
  * Create an <ol> tag
  * @return Html
  */
-function ol()
+function ol(): Html
 {
   return (new Html())->tag('ol');
 }
@@ -217,7 +217,7 @@ function ol()
  * Create a <li> tag
  * @return Html
  */
-function li()
+function li(): Html
 {
   return (new Html())->tag('li');
 }
@@ -226,7 +226,7 @@ function li()
  * Create a <table> tag
  * @return Html
  */
-function table()
+function table(): Html
 {
   return (new Html())->tag('table');
 }
@@ -235,7 +235,7 @@ function table()
  * Create a <thead> tag
  * @return Html
  */
-function thead()
+function thead(): Html
 {
   return (new Html())->tag('thead');
 }
@@ -244,7 +244,7 @@ function thead()
  * Create a <tbody> tag
  * @return Html
  */
-function tbody()
+function tbody(): Html
 {
   return (new Html())->tag('tbody');
 }
@@ -253,7 +253,7 @@ function tbody()
  * Create a <tr> tag
  * @return Html
  */
-function tr()
+function tr(): Html
 {
   return (new Html())->tag('tr');
 }
@@ -262,7 +262,7 @@ function tr()
  * Create a <th> tag
  * @return Html
  */
-function th()
+function th(): Html
 {
   return (new Html())->tag('th');
 }
@@ -271,7 +271,7 @@ function th()
  * Create a <td> tag
  * @return Html
  */
-function td()
+function td(): Html
 {
   return (new Html())->tag('td');
 }
@@ -282,19 +282,19 @@ function td()
  * @param string|null $alt Alt text
  * @return Html
  */
-function img($src = null, $alt = null)
+function img(?string $src = null, ?string $alt = null): Html
 {
   return (new Html())
     ->tag('img')
-    ->when($src !== null, fn($el) => $el->attr('src', $src))
-    ->when($alt !== null, fn($el) => $el->attr('alt', $alt));
+    ->when($src !== null, function($el) use ($src) { return $el->attr('src', $src); })
+    ->when($alt !== null, function($el) use ($alt) { return $el->attr('alt', $alt); });
 }
 
 /**
  * Create a <br> tag
  * @return Html
  */
-function br()
+function br(): Html
 {
   return (new Html())->tag('br');
 }
@@ -303,7 +303,7 @@ function br()
  * Create an <hr> tag
  * @return Html
  */
-function hr()
+function hr(): Html
 {
   return (new Html())->tag('hr');
 }
@@ -316,12 +316,14 @@ function hr()
  * @param string $url URL to link to
  * @return \Closure
  */
-function externalLink($url)
+function externalLink(string $url): \Closure
 {
-  return fn($el) => $el
-    ->attr('href', $url)
-    ->attr('target', '_blank')
-    ->attr('rel', 'noopener noreferrer');
+  return function($el) use ($url) {
+    return $el
+      ->attr('href', $url)
+      ->attr('target', '_blank')
+      ->attr('rel', 'noopener noreferrer');
+  };
 }
 
 /**
@@ -330,7 +332,7 @@ function externalLink($url)
  * @param array|string $selected Selected value(s)
  * @return \Closure
  */
-function selectOptions(array $options, $selected = [])
+function selectOptions(array $options, $selected = []): \Closure
 {
   return function($el) use ($options, $selected) {
     $selected = (array)$selected;

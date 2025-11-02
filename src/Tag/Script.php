@@ -11,12 +11,12 @@ class Script extends Html
     $this->tag("script");
   }
   
-  public function src($src)
+  public function src($src): self
   {
     return $this->attr("src", $src);
   }
-  
-  public function bridge($name, $value)
+
+  public function bridge(string $name, $value): self
   {
     if (!preg_match("#^[a-zA-Z_][a-zA-Z0-9_]*$#", $name)) {
       throw new \InvalidArgumentException();
@@ -25,7 +25,7 @@ class Script extends Html
     return $this->append(new NoEscape($code));
   }
 
-  public static function bridgeCode($value)
+  public static function bridgeCode($value): string
   {
     $json = json_encode($value);
     if ($json === false) {

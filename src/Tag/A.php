@@ -17,17 +17,17 @@ class A extends Html
     }
   }
   
-  public function href($href)
+  public function href($href): self
   {
     return $this->attr("href", $href);
   }
-  
-  public function target($target)
+
+  public function target($target): self
   {
     return $this->attr("target", $target);
   }
-  
-  public function autoTargetBlank()
+
+  public function autoTargetBlank(): self
   {
     $href = $this->getAttr("href");
     if ($href == "") {

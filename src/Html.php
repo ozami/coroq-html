@@ -24,7 +24,7 @@ class Html implements HtmlInterface
   /**
    * @return string
    */
-  public function __toString()
+  public function __toString(): string
   {
     if ($this->_tag == "") {
       return $this->getEscapedChildren();
@@ -50,7 +50,7 @@ class Html implements HtmlInterface
   /**
    * @return string
    */
-  public function getEscapedChildren()
+  public function getEscapedChildren(): string
   {
     return array_reduce($this->_children, function($html, $child) {
       return $html . static::escape($child);
@@ -60,7 +60,7 @@ class Html implements HtmlInterface
   /**
    * @return string
    */
-  public function getEscapedAttributes()
+  public function getEscapedAttributes(): string
   {
     $html = [];
     foreach ($this->_attributes as $name => $value) {
@@ -79,9 +79,9 @@ class Html implements HtmlInterface
 
   /**
    * @param array $children
-   * @return Html
+   * @return $this
    */
-  public function children(array $children)
+  public function children(array $children): self
   {
     $this->_children = $children;
     return $this;
@@ -89,9 +89,9 @@ class Html implements HtmlInterface
 
   /**
    * @param mixed $content
-   * @return Html
+   * @return $this
    */
-  public function append($content)
+  public function append($content): self
   {
     $this->_children[] = $content;
     return $this;
@@ -99,9 +99,9 @@ class Html implements HtmlInterface
 
   /**
    * @param mixed $content
-   * @return Html
+   * @return $this
    */
-  public function prepend($content)
+  public function prepend($content): self
   {
     array_unshift($this->_children, $content);
     return $this;
@@ -110,16 +110,16 @@ class Html implements HtmlInterface
   /**
    * @return array
    */
-  public function getChildren()
+  public function getChildren(): array
   {
     return $this->_children;
   }
 
   /**
    * @param string $tag
-   * @return Html
+   * @return $this
    */
-  public function tag($tag)
+  public function tag($tag): self
   {
     $tag = "$tag";
     // TODO: support characters defined in <http://www.w3.org/TR/xml11/#NT-NameStartChar>
@@ -133,7 +133,7 @@ class Html implements HtmlInterface
   /**
    * @return string
    */
-  public function getTag()
+  public function getTag(): string
   {
     return $this->_tag;
   }
@@ -141,9 +141,9 @@ class Html implements HtmlInterface
   /**
    * @param string $name
    * @param mixed $value
-   * @return Html
+   * @return $this
    */
-  public function attr($name, $value)
+  public function attr($name, $value): self
   {
     $name = "$name";
     // TODO: support characters defined in <http://www.w3.org/TR/xml11/#attdecls>
@@ -159,9 +159,9 @@ class Html implements HtmlInterface
 
   /**
    * @param array $attributes
-   * @return Html
+   * @return $this
    */
-  public function attrs(array $attributes)
+  public function attrs(array $attributes): self
   {
     foreach ($attributes as $name => $value) {
       $this->attr($name, $value);
@@ -181,16 +181,16 @@ class Html implements HtmlInterface
   /**
    * @return array
    */
-  public function getAttrs()
+  public function getAttrs(): array
   {
     return $this->_attributes;
   }
 
   /**
    * @param mixed $id
-   * @return Html
+   * @return $this
    */
-  public function id($id)
+  public function id($id): self
   {
     return $this->attr("id", $id);
   }
@@ -198,9 +198,9 @@ class Html implements HtmlInterface
   /**
    * @param string $name
    * @param mixed $value
-   * @return Html
+   * @return $this
    */
-  public function style($name, $value)
+  public function style($name, $value): self
   {
     $existing = $this->_attributes["style"] ?? "";
     return $this->attr("style", ltrim("$existing $name: $value;"));
@@ -208,9 +208,9 @@ class Html implements HtmlInterface
 
   /**
    * @param array $styles
-   * @return Html
+   * @return $this
    */
-  public function styles(array $styles)
+  public function styles(array $styles): self
   {
     foreach ($styles as $name => $value) {
       $this->style($name, $value);
@@ -220,9 +220,9 @@ class Html implements HtmlInterface
 
   /**
    * @param string $class_name
-   * @return Html
+   * @return $this
    */
-  public function addClass($class_name)
+  public function addClass($class_name): self
   {
     $existing = $this->_attributes["class"] ?? "";
     return $this->attr("class", ltrim("$existing $class_name"));
@@ -233,9 +233,9 @@ class Html implements HtmlInterface
    *
    * @param string $name Attribute name (without 'data-' prefix)
    * @param mixed $value Attribute value
-   * @return Html
+   * @return $this
    */
-  public function data($name, $value)
+  public function data($name, $value): self
   {
     return $this->attr("data-$name", $value);
   }
@@ -244,7 +244,7 @@ class Html implements HtmlInterface
    * @param string $value
    * @return $this
    */
-  public function autocomplete($value)
+  public function autocomplete($value): self
   {
     return $this->attr("autocomplete", $value);
   }
@@ -253,7 +253,7 @@ class Html implements HtmlInterface
    * @param string $value
    * @return $this
    */
-  public function placeholder($value)
+  public function placeholder($value): self
   {
     return $this->attr("placeholder", $value);
   }
@@ -262,16 +262,16 @@ class Html implements HtmlInterface
    * @param string $value
    * @return $this
    */
-  public function rows($value)
+  public function rows($value): self
   {
     return $this->attr("rows", $value);
   }
 
   /**
    * @param string $close
-   * @return Html
+   * @return $this
    */
-  public function close($close)
+  public function close(string $close): self
   {
     $this->_close = $close;
     return $this;
@@ -280,7 +280,7 @@ class Html implements HtmlInterface
   /**
    * @return string
    */
-  public function calcClose()
+  public function calcClose(): string
   {
     if ($this->_close != self::AUTO_CLOSE) {
       return $this->_close;
@@ -299,9 +299,9 @@ class Html implements HtmlInterface
   /**
    * @param callable $callable
    * @param mixed $args... optional
-   * @return Html
+   * @return $this
    */
-  public function apply($callable)
+  public function apply(callable $callable): self
   {
     $args = func_get_args();
     $args[0] = $this;
@@ -314,9 +314,9 @@ class Html implements HtmlInterface
    *
    * @param bool $condition The condition to check
    * @param callable $callback Function to execute if true, receives $this as first argument
-   * @return Html
+   * @return $this
    */
-  public function when($condition, $callback)
+  public function when(bool $condition, callable $callback): self
   {
     if ($condition) {
       return $this->apply($callback);
@@ -329,9 +329,9 @@ class Html implements HtmlInterface
    *
    * @param iterable $items The items to iterate over
    * @param callable $callback Function to execute for each item, receives ($this, $value, $key)
-   * @return Html
+   * @return $this
    */
-  public function each($items, $callback)
+  public function each(iterable $items, callable $callback): self
   {
     foreach ($items as $key => $value) {
       $callback($this, $value, $key);
@@ -345,7 +345,7 @@ class Html implements HtmlInterface
    * @param Html|null $wrapper The Html element to wrap this element with. If null, creates a new empty Html.
    * @return Html The wrapper element (with this element as child)
    */
-  public function wrap(Html $wrapper = null)
+  public function wrap(?Html $wrapper = null): Html
   {
     if ($wrapper === null) {
       $wrapper = new Html();
@@ -357,7 +357,7 @@ class Html implements HtmlInterface
    * @param mixed $s
    * @return string
    */
-  public static function escape($s)
+  public static function escape($s): string
   {
     if ($s instanceof HtmlInterface) {
       return "$s";

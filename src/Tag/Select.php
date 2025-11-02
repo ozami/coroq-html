@@ -11,7 +11,7 @@ class Select extends Html
     $this->tag("select");
   }
   
-  public function appendOptions(array $options, $selected = [])
+  public function appendOptions(array $options, $selected = []): self
   {
     $selected = (array)$selected;
     foreach ($options as $value => $label) {

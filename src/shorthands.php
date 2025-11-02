@@ -7,7 +7,7 @@ use Coroq\Html\Html;
  * @param mixed $html
  * @return Html
  */
-function h($html)
+function h($html): Html
 {
   if ($html instanceof Html) {
     return $html;
@@ -19,7 +19,7 @@ function h($html)
  * @param mixed $html
  * @return void
  */
-function p($html)
+function p($html): void
 {
   echo h($html);
 }

@@ -11,7 +11,7 @@ class Br extends Html
     $this->tag("br");
   }
 
-  public static function nl2br(Html $html)
+  public static function nl2br(Html $html): Html
   {
     $children = array_reduce($html->getChildren(), function($children, $child) {
       if ($child instanceof Html) {

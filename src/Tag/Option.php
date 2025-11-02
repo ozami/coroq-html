@@ -17,17 +17,17 @@ class Option extends Html
     }
   }
   
-  public function label($label)
+  public function label($label): self
   {
     return $this->children([$label]);
   }
-  
-  public function value($value)
+
+  public function value($value): self
   {
     return $this->attr("value", $value);
   }
-  
-  public function selected($selected = true)
+
+  public function selected(bool $selected = true): self
   {
     return $this->attr("selected", $selected);
   }

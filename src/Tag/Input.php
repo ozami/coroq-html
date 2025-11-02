@@ -11,22 +11,22 @@ class Input extends Html
     $this->tag("input");
   }
   
-  public function type($type)
+  public function type($type): self
   {
     return $this->attr("type", $type);
   }
-  
-  public function name($name)
+
+  public function name($name): self
   {
     return $this->attr("name", $name);
   }
 
-  public function value($value)
+  public function value($value): self
   {
     return $this->attr("value", $value);
   }
 
-  public function checked($checked = true)
+  public function checked(bool $checked = true): self
   {
     return $this->attr("checked", $checked);
   }

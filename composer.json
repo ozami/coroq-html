@@ -20,7 +20,6 @@
             "Coroq\\Html\\": "src/"
         },
         "files": [
-            "src/shorthands.php",
             "src/helpers.php"
         ]
     },

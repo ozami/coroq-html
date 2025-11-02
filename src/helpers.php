@@ -5,6 +5,29 @@ namespace Coroq\Html;
 
 use Coroq\Html\Html;
 
+/**
+ * Wrap content in Html element
+ * @param mixed $html
+ * @return Html
+ */
+function h($html): Html
+{
+  if ($html instanceof Html) {
+    return $html;
+  }
+  return (new Html)->append($html);
+}
+
+/**
+ * Echo Html content
+ * @param mixed $html
+ * @return void
+ */
+function p($html): void
+{
+  echo h($html);
+}
+
 // Tag creation helpers (return Html)
 
 /**

@@ -442,4 +442,180 @@ class HtmlTest extends TestCase
       $html->__toString()
     );
   }
+
+  public function testChildren()
+  {
+    $html = (new Html())->tag("div")->children(["a", "b", "c"]);
+    $this->assertSame("<div>abc</div>", $html->__toString());
+  }
+
+  public function testChildrenReplacesExisting()
+  {
+    $html = (new Html())->tag("p")->append("old")->children(["new"]);
+    $this->assertSame("<p>new</p>", $html->__toString());
+  }
+
+  public function testPrepend()
+  {
+    $html = (new Html())->tag("div")->append("second")->prepend("first");
+    $this->assertSame("<div>firstsecond</div>", $html->__toString());
+  }
+
+  public function testPrependMultiple()
+  {
+    $html = (new Html())->tag("div")->prepend("a")->prepend("b")->prepend("c");
+    $this->assertSame("<div>cba</div>", $html->__toString());
+  }
+
+  public function testGetChildren()
+  {
+    $html = (new Html())->append("a")->append("b");
+    $this->assertSame(["a", "b"], $html->getChildren());
+  }
+
+  public function testGetChildrenEmpty()
+  {
+    $html = new Html();
+    $this->assertSame([], $html->getChildren());
+  }
+
+  public function testGetAttr()
+  {
+    $html = (new Html())->attr("id", "test");
+    $this->assertSame("test", $html->getAttr("id"));
+  }
+
+  public function testGetAttrNonExistent()
+  {
+    $html = new Html();
+    $this->assertNull($html->getAttr("class"));
+  }
+
+  public function testGetAttrs()
+  {
+    $html = (new Html())->id("test")->addClass("active");
+    $this->assertSame(["id" => "test", "class" => "active"], $html->getAttrs());
+  }
+
+  public function testGetAttrsEmpty()
+  {
+    $html = new Html();
+    $this->assertSame([], $html->getAttrs());
+  }
+
+  public function testAttrs()
+  {
+    $html = (new Html())->tag("input")->attrs([
+      "type" => "text",
+      "name" => "username",
+      "required" => true
+    ]);
+    $this->assertSame('<input type="text" name="username" required>', $html->__toString());
+  }
+
+  public function testStyle()
+  {
+    $html = (new Html())->tag("div")->style("color", "red");
+    $this->assertSame('<div style="color: red;"></div>', $html->__toString());
+  }
+
+  public function testStyleMultiple()
+  {
+    $html = (new Html())->tag("div")->style("width", "100px")->style("height", "50px");
+    $this->assertSame('<div style="width: 100px; height: 50px;"></div>', $html->__toString());
+  }
+
+  public function testStyles()
+  {
+    $html = (new Html())->tag("div")->styles([
+      "width" => "100px",
+      "height" => "50px",
+      "background" => "blue"
+    ]);
+    $this->assertSame('<div style="width: 100px; height: 50px; background: blue;"></div>', $html->__toString());
+  }
+
+  public function testAutocomplete()
+  {
+    $html = (new Html())->tag("input")->autocomplete("off");
+    $this->assertSame('<input autocomplete="off">', $html->__toString());
+  }
+
+  public function testPlaceholder()
+  {
+    $html = (new Html())->tag("input")->placeholder("Enter your name");
+    $this->assertSame('<input placeholder="Enter your name">', $html->__toString());
+  }
+
+  public function testRows()
+  {
+    $html = (new Html())->tag("textarea")->rows("5");
+    $this->assertSame('<textarea rows="5"></textarea>', $html->__toString());
+  }
+
+  public function testCloseNoClose()
+  {
+    $html = (new Html())->tag("input")->close(Html::NO_CLOSE);
+    $this->assertSame('<input>', $html->__toString());
+  }
+
+  public function testCloseExplicitClose()
+  {
+    $html = (new Html())->tag("br")->close(Html::CLOSE);
+    $this->assertSame('<br></br>', $html->__toString());
+  }
+
+  public function testCalcCloseForEmptyTag()
+  {
+    $html = (new Html())->tag("br");
+    $this->assertSame(Html::NO_CLOSE, $html->calcClose());
+  }
+
+  public function testCalcCloseForNormalTag()
+  {
+    $html = (new Html())->tag("div");
+    $this->assertSame(Html::CLOSE, $html->calcClose());
+  }
+
+  public function testCalcCloseRespectsManualSetting()
+  {
+    $html = (new Html())->tag("div")->close(Html::SELF_CLOSE);
+    $this->assertSame(Html::SELF_CLOSE, $html->calcClose());
+  }
+
+  public function testEscapeWithHtmlInterface()
+  {
+    $inner = (new Html())->tag("b")->append("Bold");
+    $this->assertSame("<b>Bold</b>", Html::escape($inner));
+  }
+
+  public function testEscapeThrowsExceptionForInvalidUtf8()
+  {
+    $this->expectException(\InvalidArgumentException::class);
+    Html::escape("\xFF\xFE");
+  }
+
+  public function testAttrWithFalse()
+  {
+    $html = (new Html())->tag("div")->attr("hidden", false);
+    $this->assertSame('<div></div>', $html->__toString());
+  }
+
+  public function testAttrWithNull()
+  {
+    $html = (new Html())->tag("div")->attr("hidden", null);
+    $this->assertSame('<div></div>', $html->__toString());
+  }
+
+  public function testAttrWithEmptyNameThrowsException()
+  {
+    $this->expectException(\InvalidArgumentException::class);
+    (new Html())->attr("", "value");
+  }
+
+  public function testAttrWithInvalidNameThrowsException()
+  {
+    $this->expectException(\InvalidArgumentException::class);
+    (new Html())->attr("invalid name", "value");
+  }
 }

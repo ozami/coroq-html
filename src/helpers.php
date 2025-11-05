@@ -446,12 +446,12 @@ function script(?string $src = null, ?string $type = null): Html
 }
 
 /**
- * Create a script tag with PHP-to-JS variable bridge
- * @param string $name JavaScript variable name
+ * Create a script tag with PHP data exported to JavaScript
+ * @param string $name JavaScript constant name
  * @param mixed $value PHP value to encode
  * @return Html
  */
-function scriptBridge(string $name, $value): Html
+function scriptData(string $name, $value): Html
 {
   if (!preg_match("#^[a-zA-Z_][a-zA-Z0-9_]*$#", $name)) {
     throw new \InvalidArgumentException();
@@ -464,7 +464,7 @@ function scriptBridge(string $name, $value): Html
   if ($base64 === false) {
     throw new \RuntimeException();
   }
-  $code = "var $name = JSON.parse(atob('$base64'));";
+  $code = "const $name = JSON.parse(atob('$base64'));";
   return script()->append(new \Coroq\Html\NoEscape($code));
 }
 

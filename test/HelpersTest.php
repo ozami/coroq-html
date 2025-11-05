@@ -6,7 +6,7 @@ use function Coroq\Html\{
   para, heading, h1, h2, h3, h4, h5, h6,
   div, span, small, a, button, input, select, option, textarea, label, form,
   ul, ol, li, table, thead, tbody, tr, th, td, img, iframe, time, br, hr,
-  nl2br, script, scriptBridge,
+  nl2br, script, scriptData,
   externalLink, selectOptions
 };
 
@@ -49,7 +49,7 @@ use function Coroq\Html\{
  * @covers Coroq\Html\nl2br
  * @covers Coroq\Html\hr
  * @covers Coroq\Html\script
- * @covers Coroq\Html\scriptBridge
+ * @covers Coroq\Html\scriptData
  * @covers Coroq\Html\externalLink
  * @covers Coroq\Html\selectOptions
  */
@@ -405,13 +405,13 @@ class HelpersTest extends TestCase
     );
   }
 
-  public function testScriptBridgeCanEncodeScalarValue()
+  public function testScriptDataCanEncodeScalarValue()
   {
     foreach (["text", 1, false, null] as $value) {
-      $h = scriptBridge("test", $value);
+      $h = scriptData("test", $value);
       $encoded = base64_encode(json_encode($value));
       $this->assertSame(
-        "<script>var test = JSON.parse(atob('$encoded'));</script>",
+        "<script>const test = JSON.parse(atob('$encoded'));</script>",
         (string)$h
       );
     }

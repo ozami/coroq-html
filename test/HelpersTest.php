@@ -1,6 +1,7 @@
 <?php
 use PHPUnit\Framework\TestCase;
 use function Coroq\Html\{
+  h, p, noEscape,
   para, heading, h1, h2, h3, h4, h5, h6,
   div, span, small, a, button, input, select, option, textarea, label, form,
   ul, ol, li, table, thead, tbody, tr, th, td, img, iframe, time, br, hr,
@@ -8,6 +9,9 @@ use function Coroq\Html\{
 };
 
 /**
+ * @covers Coroq\Html\h
+ * @covers Coroq\Html\p
+ * @covers Coroq\Html\noEscape
  * @covers Coroq\Html\para
  * @covers Coroq\Html\heading
  * @covers Coroq\Html\h1
@@ -46,6 +50,28 @@ use function Coroq\Html\{
  */
 class HelpersTest extends TestCase
 {
+  public function testH()
+  {
+    $html = h('test');
+    $this->assertInstanceOf(\Coroq\Html\Html::class, $html);
+    $this->assertSame('test', (string)$html);
+
+    // h() should return Html instance as-is
+    $existing = new \Coroq\Html\Html();
+    $this->assertSame($existing, h($existing));
+  }
+
+  public function testNoEscape()
+  {
+    $raw = noEscape('<strong>bold</strong>');
+    $this->assertInstanceOf(\Coroq\Html\NoEscape::class, $raw);
+    $this->assertSame('<strong>bold</strong>', (string)$raw);
+
+    // Test that it's not escaped when appended
+    $html = div()->append($raw);
+    $this->assertSame('<div><strong>bold</strong></div>', (string)$html);
+  }
+
   public function testPara()
   {
     $this->assertSame(

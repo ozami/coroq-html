@@ -28,6 +28,17 @@ function p($html): void
   echo h($html);
 }
 
+/**
+ * Create NoEscape wrapper for raw HTML content
+ * WARNING: Content is output as-is without escaping. Risk of XSS if content contains user input.
+ * @param mixed $content Raw HTML content to output without escaping
+ * @return NoEscape
+ */
+function noEscape($content): NoEscape
+{
+  return new NoEscape($content);
+}
+
 // Tag creation helpers (return Html)
 
 /**
@@ -454,7 +465,7 @@ function scriptBridge(string $name, $value): Html
     throw new \RuntimeException();
   }
   $code = "var $name = JSON.parse(atob('$base64'));";
-  return script()->append(new \Coroq\Html\Tag\NoEscape($code));
+  return script()->append(new \Coroq\Html\NoEscape($code));
 }
 
 // Configuration helpers (return Closure for use with apply())

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Coroq\Html\Tag;
+namespace Coroq\Html;
 
 use Coroq\Html\HtmlInterface;
 

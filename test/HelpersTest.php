@@ -2,8 +2,8 @@
 use PHPUnit\Framework\TestCase;
 use function Coroq\Html\{
   para, heading, h1, h2, h3, h4, h5, h6,
-  div, span, a, button, input, select, option, textarea, label, form,
-  ul, ol, li, table, thead, tbody, tr, th, td, img, br, hr,
+  div, span, small, a, button, input, select, option, textarea, label, form,
+  ul, ol, li, table, thead, tbody, tr, th, td, img, iframe, time, br, hr,
   externalLink, selectOptions
 };
 
@@ -18,6 +18,7 @@ use function Coroq\Html\{
  * @covers Coroq\Html\h6
  * @covers Coroq\Html\div
  * @covers Coroq\Html\span
+ * @covers Coroq\Html\small
  * @covers Coroq\Html\a
  * @covers Coroq\Html\button
  * @covers Coroq\Html\input
@@ -36,6 +37,8 @@ use function Coroq\Html\{
  * @covers Coroq\Html\th
  * @covers Coroq\Html\td
  * @covers Coroq\Html\img
+ * @covers Coroq\Html\iframe
+ * @covers Coroq\Html\time
  * @covers Coroq\Html\br
  * @covers Coroq\Html\hr
  * @covers Coroq\Html\externalLink
@@ -131,10 +134,11 @@ class HelpersTest extends TestCase
 
   public function testInput()
   {
-    $this->assertSame('<input type="text">', input()->__toString());
+    $this->assertSame('<input>', input()->__toString());
+    $this->assertSame('<input type="text">', input('text')->__toString());
     $this->assertSame('<input type="email">', input('email')->__toString());
     $this->assertSame(
-      '<input type="email" name="email" id="email">',
+      '<input type="email" name="email">',
       input('email', 'email')->__toString()
     );
   }
@@ -157,7 +161,7 @@ class HelpersTest extends TestCase
   {
     $this->assertSame('<textarea></textarea>', textarea()->__toString());
     $this->assertSame(
-      '<textarea name="bio" id="bio"></textarea>',
+      '<textarea name="bio"></textarea>',
       textarea('bio')->__toString()
     );
   }
@@ -173,10 +177,14 @@ class HelpersTest extends TestCase
 
   public function testForm()
   {
-    $this->assertSame('<form method="post"></form>', form()->__toString());
+    $this->assertSame('<form></form>', form()->__toString());
+    $this->assertSame(
+      '<form action="/submit"></form>',
+      form('/submit')->__toString()
+    );
     $this->assertSame(
       '<form action="/submit" method="post"></form>',
-      form('/submit')->__toString()
+      form('/submit', 'post')->__toString()
     );
     $this->assertSame(
       '<form action="/search" method="get"></form>',
@@ -239,6 +247,55 @@ class HelpersTest extends TestCase
     $this->assertSame(
       '<img src="photo.jpg" alt="A photo">',
       img('photo.jpg', 'A photo')->__toString()
+    );
+  }
+
+  public function testIframe()
+  {
+    $this->assertSame('<iframe></iframe>', iframe()->__toString());
+    $this->assertSame(
+      '<iframe src="https://example.com"></iframe>',
+      iframe('https://example.com')->__toString()
+    );
+  }
+
+  public function testTime()
+  {
+    // Empty time tag
+    $this->assertSame('<time></time>', time()->__toString());
+
+    // Timestamp without format
+    $result = time(timestamp: 1699000000);
+    $this->assertStringContainsString('<time datetime="', (string)$result);
+    $this->assertStringContainsString('</time>', (string)$result);
+
+    // Timestamp with format
+    $result = time(timestamp: 1699000000, format: 'Y-m-d');
+    $this->assertStringContainsString('datetime=', (string)$result);
+    $this->assertStringContainsString('>2023-11-03<', (string)$result);
+
+    // DateTime object
+    $dt = new \DateTime('2023-11-03 10:30:00', new \DateTimeZone('UTC'));
+    $result = time(datetime: $dt);
+    $this->assertStringContainsString('datetime="2023-11-03T10:30:00+00:00"', (string)$result);
+
+    // DateTime with format
+    $result = time(datetime: $dt, format: 'F j, Y');
+    $this->assertStringContainsString('>November 3, 2023<', (string)$result);
+
+    // ISO 8601 string
+    $result = time(iso8601: '2023-11-03T10:30:00+00:00');
+    $this->assertSame(
+      '<time datetime="2023-11-03T10:30:00+00:00">2023-11-03T10:30:00+00:00</time>',
+      (string)$result
+    );
+  }
+
+  public function testSmall()
+  {
+    $this->assertSame(
+      '<small>Fine print</small>',
+      small()->append('Fine print')->__toString()
     );
   }
 

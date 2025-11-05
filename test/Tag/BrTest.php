@@ -1,11 +1,8 @@
 <?php
 use Coroq\Html\Html;
-use Coroq\Html\Tag\Br;
+use function Coroq\Html\nl2br as htmlNl2br;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers Coroq\Html\Tag\Br
- */
 class BrTest extends TestCase
 {
   public function testNl2BrCanProcessSingleChild()
@@ -15,10 +12,10 @@ class BrTest extends TestCase
     $h->append($text);
     $this->assertSame(
       nl2br($text, false),
-      (string)Br::nl2br($h)
+      (string)htmlNl2br($h)
     );
   }
-  
+
   public function testNl2BrCanProcessMultipleChild()
   {
     $text = "\ntest\ntest\n\ntest\n";
@@ -27,10 +24,10 @@ class BrTest extends TestCase
     $h->append($text);
     $this->assertSame(
       nl2br($text . $text, false),
-      (string)Br::nl2br($h)
+      (string)htmlNl2br($h)
     );
   }
-  
+
   public function testNl2BrCanProcessRecursively()
   {
     $text = "\ntest\ntest\n\ntest\n";
@@ -40,7 +37,7 @@ class BrTest extends TestCase
     $h->append($text);
     $this->assertSame(
       nl2br("$text<p>$text</p>$text", false),
-      (string)Br::nl2br($h)
+      (string)htmlNl2br($h)
     );
   }
 }

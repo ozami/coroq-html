@@ -1,10 +1,12 @@
 <?php
 use PHPUnit\Framework\TestCase;
+use Coroq\Html\Html;
 use function Coroq\Html\{
   h, p, noEscape,
   para, heading, h1, h2, h3, h4, h5, h6,
   div, span, small, a, button, input, select, option, textarea, label, form,
   ul, ol, li, table, thead, tbody, tr, th, td, img, iframe, time, br, hr,
+  nl2br, script, scriptBridge,
   externalLink, selectOptions
 };
 
@@ -44,7 +46,10 @@ use function Coroq\Html\{
  * @covers Coroq\Html\iframe
  * @covers Coroq\Html\time
  * @covers Coroq\Html\br
+ * @covers Coroq\Html\nl2br
  * @covers Coroq\Html\hr
+ * @covers Coroq\Html\script
+ * @covers Coroq\Html\scriptBridge
  * @covers Coroq\Html\externalLink
  * @covers Coroq\Html\selectOptions
  */
@@ -364,26 +369,51 @@ class HelpersTest extends TestCase
     );
   }
 
-  public function testComplexExample()
+  public function testNl2BrCanProcessSingleChild()
   {
-    $html = div()
-      ->addClass('container')
-      ->append(h1()->append('Welcome'))
-      ->append(para()->addClass('intro')->append('Hello world'))
-      ->append(
-        ul()
-          ->append(li()->append('First'))
-          ->append(li()->append('Second'))
-      )
-      ->append(a('/more')->append('Read more'));
+    $text = "\ntest\ntest\n\ntest\n";
+    $h = new Html();
+    $h->append($text);
+    $this->assertSame(
+      \nl2br($text, false),
+      (string)nl2br($h)
+    );
+  }
 
-    $expected = '<div class="container">' .
-      '<h1>Welcome</h1>' .
-      '<p class="intro">Hello world</p>' .
-      '<ul><li>First</li><li>Second</li></ul>' .
-      '<a href="/more">Read more</a>' .
-      '</div>';
+  public function testNl2BrCanProcessMultipleChild()
+  {
+    $text = "\ntest\ntest\n\ntest\n";
+    $h = new Html();
+    $h->append($text);
+    $h->append($text);
+    $this->assertSame(
+      \nl2br($text . $text, false),
+      (string)nl2br($h)
+    );
+  }
 
-    $this->assertSame($expected, $html->__toString());
+  public function testNl2BrCanProcessRecursively()
+  {
+    $text = "\ntest\ntest\n\ntest\n";
+    $h = new Html();
+    $h->append($text);
+    $h->append((new Html())->tag("p")->append($text));
+    $h->append($text);
+    $this->assertSame(
+      \nl2br("$text<p>$text</p>$text", false),
+      (string)nl2br($h)
+    );
+  }
+
+  public function testScriptBridgeCanEncodeScalarValue()
+  {
+    foreach (["text", 1, false, null] as $value) {
+      $h = scriptBridge("test", $value);
+      $encoded = base64_encode(json_encode($value));
+      $this->assertSame(
+        "<script>var test = JSON.parse(atob('$encoded'));</script>",
+        (string)$h
+      );
+    }
   }
 }

@@ -89,7 +89,7 @@ class Html implements HtmlInterface
    * @param mixed $content
    * @return $this
    */
-  public function append($content): self
+  public function append(mixed $content): self
   {
     $this->children[] = $content;
     return $this;
@@ -99,7 +99,7 @@ class Html implements HtmlInterface
    * @param mixed $content
    * @return $this
    */
-  public function prepend($content): self
+  public function prepend(mixed $content): self
   {
     array_unshift($this->children, $content);
     return $this;
@@ -117,7 +117,7 @@ class Html implements HtmlInterface
    * @param string $tag
    * @return $this
    */
-  public function tag($tag): self
+  public function tag(string $tag): self
   {
     $tag = "$tag";
     // TODO: support characters defined in <http://www.w3.org/TR/xml11/#NT-NameStartChar>
@@ -141,7 +141,7 @@ class Html implements HtmlInterface
    * @param mixed $value
    * @return $this
    */
-  public function attr($name, $value): self
+  public function attr(string $name, mixed $value): self
   {
     $name = "$name";
     // TODO: support characters defined in <http://www.w3.org/TR/xml11/#attdecls>
@@ -171,7 +171,7 @@ class Html implements HtmlInterface
    * @param string $name
    * @return mixed
    */
-  public function getAttr($name)
+  public function getAttr(string $name): mixed
   {
     return $this->attributes[$name] ?? null;
   }
@@ -185,10 +185,10 @@ class Html implements HtmlInterface
   }
 
   /**
-   * @param mixed $id
+   * @param string $id
    * @return $this
    */
-  public function id($id): self
+  public function id(string $id): self
   {
     return $this->attr("id", $id);
   }
@@ -198,7 +198,7 @@ class Html implements HtmlInterface
    * @param mixed $value
    * @return $this
    */
-  public function style($name, $value): self
+  public function style(string $name, mixed $value): self
   {
     $existing = $this->attributes["style"] ?? "";
     return $this->attr("style", ltrim("$existing $name: $value;"));
@@ -220,7 +220,7 @@ class Html implements HtmlInterface
    * @param string $class_name
    * @return $this
    */
-  public function addClass($class_name): self
+  public function addClass(string $class_name): self
   {
     $existing = $this->attributes["class"] ?? "";
     return $this->attr("class", ltrim("$existing $class_name"));
@@ -233,7 +233,7 @@ class Html implements HtmlInterface
    * @param mixed $value Attribute value
    * @return $this
    */
-  public function data($name, $value): self
+  public function data(string $name, mixed $value): self
   {
     return $this->attr("data-$name", $value);
   }
@@ -242,7 +242,7 @@ class Html implements HtmlInterface
    * @param string $value
    * @return $this
    */
-  public function autocomplete($value): self
+  public function autocomplete(string $value): self
   {
     return $this->attr("autocomplete", $value);
   }
@@ -251,7 +251,7 @@ class Html implements HtmlInterface
    * @param string $value
    * @return $this
    */
-  public function placeholder($value): self
+  public function placeholder(string $value): self
   {
     return $this->attr("placeholder", $value);
   }
@@ -346,7 +346,7 @@ class Html implements HtmlInterface
    * @param mixed $anything
    * @return string
    */
-  public static function escape($anything): string
+  public static function escape(mixed $anything): string
   {
     $string = "$anything";
     if ($anything instanceof HtmlInterface) {

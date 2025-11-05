@@ -398,31 +398,6 @@ function br(): Html
 }
 
 /**
- * Convert newlines to <br> tags recursively
- * @param Html $html Html element to process
- * @return Html The same element with newlines converted
- */
-function nl2br(Html $html): Html
-{
-  $processChild = function($children, $child) {
-    if ($child instanceof Html) {
-      $children[] = nl2br($child);
-    }
-    else {
-      $parts = preg_split("#(\r\n|\r|\n)#", "$child");
-      $children[] = array_shift($parts);
-      foreach ($parts as $p) {
-        $children[] = (new Html())->tag('br');
-        $children[] = "\n$p";
-      }
-    }
-    return $children;
-  };
-  $children = array_reduce($html->getChildren(), $processChild, []);
-  return $html->children($children);
-}
-
-/**
  * Create an <hr> tag
  * @return Html
  */

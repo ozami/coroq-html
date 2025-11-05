@@ -6,7 +6,7 @@ use function Coroq\Html\{
   para, heading, h1, h2, h3, h4, h5, h6,
   div, span, small, a, button, input, select, option, textarea, label, form,
   ul, ol, li, table, thead, tbody, tr, th, td, img, iframe, time, br, hr,
-  nl2br, script, scriptData,
+  script, scriptData,
   externalLink, selectOptions
 };
 
@@ -46,7 +46,6 @@ use function Coroq\Html\{
  * @covers Coroq\Html\iframe
  * @covers Coroq\Html\time
  * @covers Coroq\Html\br
- * @covers Coroq\Html\nl2br
  * @covers Coroq\Html\hr
  * @covers Coroq\Html\script
  * @covers Coroq\Html\scriptData
@@ -366,42 +365,6 @@ class HelpersTest extends TestCase
     $this->assertSame(
       '<select><option value="a" selected>Alpha</option><option value="b">Beta</option><option value="c" selected>Gamma</option></select>',
       $sel->__toString()
-    );
-  }
-
-  public function testNl2BrCanProcessSingleChild()
-  {
-    $text = "\ntest\ntest\n\ntest\n";
-    $h = new Html();
-    $h->append($text);
-    $this->assertSame(
-      \nl2br($text, false),
-      (string)nl2br($h)
-    );
-  }
-
-  public function testNl2BrCanProcessMultipleChild()
-  {
-    $text = "\ntest\ntest\n\ntest\n";
-    $h = new Html();
-    $h->append($text);
-    $h->append($text);
-    $this->assertSame(
-      \nl2br($text . $text, false),
-      (string)nl2br($h)
-    );
-  }
-
-  public function testNl2BrCanProcessRecursively()
-  {
-    $text = "\ntest\ntest\n\ntest\n";
-    $h = new Html();
-    $h->append($text);
-    $h->append((new Html())->tag("p")->append($text));
-    $h->append($text);
-    $this->assertSame(
-      \nl2br("$text<p>$text</p>$text", false),
-      (string)nl2br($h)
     );
   }
 

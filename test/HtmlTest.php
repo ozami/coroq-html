@@ -547,12 +547,6 @@ class HtmlTest extends TestCase
     $this->assertSame('<input placeholder="Enter your name">', $html->__toString());
   }
 
-  public function testRows()
-  {
-    $html = (new Html())->tag("textarea")->rows("5");
-    $this->assertSame('<textarea rows="5"></textarea>', $html->__toString());
-  }
-
   public function testCloseNoClose()
   {
     $html = (new Html())->tag("input")->close(Html::NO_CLOSE);

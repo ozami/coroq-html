@@ -20,6 +20,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Convert the HTML element to its string representation
    * @return string
    */
   public function __toString(): string
@@ -46,6 +47,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Get all children as escaped HTML string
    * @return string
    */
   public function getEscapedChildren(): string
@@ -56,6 +58,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Get all attributes as escaped HTML attribute string
    * @return string
    */
   public function getEscapedAttributes(): string
@@ -76,6 +79,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Replace all children with the given array
    * @param array $children
    * @return $this
    */
@@ -86,6 +90,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Append content to the end of children
    * @param mixed $content
    * @return $this
    */
@@ -96,6 +101,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Prepend content to the beginning of children
    * @param mixed $content
    * @return $this
    */
@@ -106,6 +112,7 @@ class Html implements HtmlInterface
   }
   
   /**
+   * Get all children as an array
    * @return array
    */
   public function getChildren(): array
@@ -114,6 +121,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Set the tag name for this element
    * @param string $tag
    * @return $this
    */
@@ -129,6 +137,7 @@ class Html implements HtmlInterface
   }
   
   /**
+   * Get the tag name of this element
    * @return string
    */
   public function getTag(): string
@@ -137,6 +146,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Set an attribute on this element
    * @param string $name
    * @param mixed $value
    * @return $this
@@ -156,6 +166,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Set multiple attributes at once
    * @param array $attributes
    * @return $this
    */
@@ -168,6 +179,7 @@ class Html implements HtmlInterface
   }
   
   /**
+   * Get the value of an attribute
    * @param string $name
    * @return mixed
    */
@@ -177,6 +189,7 @@ class Html implements HtmlInterface
   }
   
   /**
+   * Get all attributes as an associative array
    * @return array
    */
   public function getAttrs(): array
@@ -185,6 +198,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Set the id attribute
    * @param string $id
    * @return $this
    */
@@ -194,6 +208,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Add a CSS style property
    * @param string $name
    * @param mixed $value
    * @return $this
@@ -205,6 +220,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Add multiple CSS style properties at once
    * @param array $styles
    * @return $this
    */
@@ -217,6 +233,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Add a CSS class to the element
    * @param string $class_name
    * @return $this
    */
@@ -239,6 +256,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Set the autocomplete attribute
    * @param string $value
    * @return $this
    */
@@ -248,6 +266,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Set the placeholder attribute
    * @param string $value
    * @return $this
    */
@@ -257,6 +276,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Set the close mode for this element
    * @param string $close
    * @return $this
    */
@@ -267,6 +287,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Calculate the appropriate close mode based on tag type
    * @return string
    */
   public function calcClose(): string
@@ -343,6 +364,7 @@ class Html implements HtmlInterface
   }
 
   /**
+   * Escape content for safe HTML output
    * @param mixed $anything
    * @return string
    */

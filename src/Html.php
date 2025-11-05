@@ -10,14 +10,10 @@ class Html implements HtmlInterface
   const NO_CLOSE = "no";
   const SELF_CLOSE = "self";
 
-  /** @var string */
-  private $tag = "";
-  /** @var array */
-  private $children = [];
-  /** @var array */
-  private $attributes = [];
-  /** @var string */
-  private $close = self::AUTO_CLOSE;
+  private string $tag = "";
+  private array $children = [];
+  private array $attributes = [];
+  private string $close = self::AUTO_CLOSE;
 
   public function __construct()
   {

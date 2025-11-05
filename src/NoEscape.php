@@ -7,8 +7,7 @@ use Coroq\Html\HtmlInterface;
 
 class NoEscape implements HtmlInterface
 {
-  /** @var string */
-  private $text;
+  private string $text;
 
   public function __construct($text)
   {

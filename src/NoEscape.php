@@ -8,15 +8,15 @@ use Coroq\Html\HtmlInterface;
 class NoEscape implements HtmlInterface
 {
   /** @var string */
-  public $_text;
+  private $text;
 
   public function __construct($text)
   {
-    $this->_text = (string)$text;
+    $this->text = (string)$text;
   }
 
   public function __toString(): string
   {
-    return $this->_text;
+    return $this->text;
   }
 }

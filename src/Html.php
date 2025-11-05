@@ -11,13 +11,13 @@ class Html implements HtmlInterface
   const SELF_CLOSE = "self";
 
   /** @var string */
-  public $_tag = "";
+  private $tag = "";
   /** @var array */
-  public $_children = [];
+  private $children = [];
   /** @var array */
-  public $_attributes = [];
+  private $attributes = [];
   /** @var string */
-  public $_close = self::AUTO_CLOSE;
+  private $close = self::AUTO_CLOSE;
 
   public function __construct()
   {
@@ -28,10 +28,10 @@ class Html implements HtmlInterface
    */
   public function __toString(): string
   {
-    if ($this->_tag == "") {
+    if ($this->tag == "") {
       return $this->getEscapedChildren();
     }
-    $html = "<" . $this->_tag;
+    $html = "<" . $this->tag;
     $attributes = $this->getEscapedAttributes();
     if ($attributes != "") {
       $html .= " " . $attributes;
@@ -43,7 +43,7 @@ class Html implements HtmlInterface
     else {
       $html .= ">" . $this->getEscapedChildren();
       if ($close == self::CLOSE) {
-        $html .= "</$this->_tag>";
+        $html .= "</$this->tag>";
       }
     }
     return $html;
@@ -54,7 +54,7 @@ class Html implements HtmlInterface
    */
   public function getEscapedChildren(): string
   {
-    return array_reduce($this->_children, function($html, $child) {
+    return array_reduce($this->children, function($html, $child) {
       return $html . static::escape($child);
     }, "");
   }
@@ -65,7 +65,7 @@ class Html implements HtmlInterface
   public function getEscapedAttributes(): string
   {
     $html = [];
-    foreach ($this->_attributes as $name => $value) {
+    foreach ($this->attributes as $name => $value) {
       if ($value === false || $value === null) {
         // ignore
       }
@@ -85,7 +85,7 @@ class Html implements HtmlInterface
    */
   public function children(array $children): self
   {
-    $this->_children = $children;
+    $this->children = $children;
     return $this;
   }
 
@@ -95,7 +95,7 @@ class Html implements HtmlInterface
    */
   public function append($content): self
   {
-    $this->_children[] = $content;
+    $this->children[] = $content;
     return $this;
   }
 
@@ -105,7 +105,7 @@ class Html implements HtmlInterface
    */
   public function prepend($content): self
   {
-    array_unshift($this->_children, $content);
+    array_unshift($this->children, $content);
     return $this;
   }
   
@@ -114,7 +114,7 @@ class Html implements HtmlInterface
    */
   public function getChildren(): array
   {
-    return $this->_children;
+    return $this->children;
   }
 
   /**
@@ -128,7 +128,7 @@ class Html implements HtmlInterface
     if (preg_match("/[^-:A-Za-z0-9_.]/", $tag)) {
       throw new \InvalidArgumentException();
     }
-    $this->_tag = $tag;
+    $this->tag = $tag;
     return $this;
   }
   
@@ -137,7 +137,7 @@ class Html implements HtmlInterface
    */
   public function getTag(): string
   {
-    return $this->_tag;
+    return $this->tag;
   }
 
   /**
@@ -155,7 +155,7 @@ class Html implements HtmlInterface
     if ($name == "") {
       throw new \InvalidArgumentException();
     }
-    $this->_attributes[$name] = $value;
+    $this->attributes[$name] = $value;
     return $this;
   }
 
@@ -177,7 +177,7 @@ class Html implements HtmlInterface
    */
   public function getAttr($name)
   {
-    return $this->_attributes[$name] ?? null;
+    return $this->attributes[$name] ?? null;
   }
   
   /**
@@ -185,7 +185,7 @@ class Html implements HtmlInterface
    */
   public function getAttrs(): array
   {
-    return $this->_attributes;
+    return $this->attributes;
   }
 
   /**
@@ -204,7 +204,7 @@ class Html implements HtmlInterface
    */
   public function style($name, $value): self
   {
-    $existing = $this->_attributes["style"] ?? "";
+    $existing = $this->attributes["style"] ?? "";
     return $this->attr("style", ltrim("$existing $name: $value;"));
   }
 
@@ -226,7 +226,7 @@ class Html implements HtmlInterface
    */
   public function addClass($class_name): self
   {
-    $existing = $this->_attributes["class"] ?? "";
+    $existing = $this->attributes["class"] ?? "";
     return $this->attr("class", ltrim("$existing $class_name"));
   }
 
@@ -275,7 +275,7 @@ class Html implements HtmlInterface
    */
   public function close(string $close): self
   {
-    $this->_close = $close;
+    $this->close = $close;
     return $this;
   }
 
@@ -284,15 +284,15 @@ class Html implements HtmlInterface
    */
   public function calcClose(): string
   {
-    if ($this->_close != self::AUTO_CLOSE) {
-      return $this->_close;
+    if ($this->close != self::AUTO_CLOSE) {
+      return $this->close;
     }
     static $empties = [
       "area", "base", "br", "col", "command", "embed",
       "hr", "img", "input", "keygen", "link", "meta",
       "param", "source", "track", "wbr",
     ];
-    if (in_array($this->_tag, $empties)) {
+    if (in_array($this->tag, $empties)) {
       return self::NO_CLOSE;
     }
     return self::CLOSE;

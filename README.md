@@ -1,167 +1,148 @@
 # coroq/html
 
-Safe HTML escaping and generation for PHP templates.
+HTML escaping for PHP templates.
 
-## Requirements
+## Install
 
-- PHP 8.0 or higher
-- No external dependencies
+```bash
+composer require coroq/html
+```
 
-## Core concept
-
-**Always use `h()` before echo.** It's safe to call multiple times:
+## Quickstart
 
 ```php
 use function Coroq\Html\h;
 
-echo h('&');           // &amp;
-echo h(h('&'));        // &amp; (not double-escaped)
-echo h(h(h('&')));     // &amp; (still not double-escaped)
+<p><?= h('cookies & cream') ?></p>
+<!-- Output: <p>cookies &amp; cream</p> -->
 ```
 
-`h()` wraps content in an Html object that escapes strings but passes through Html objects unchanged. This prevents double-escaping and enables mixing strings with Html objects.
+Use `h()` when echoing - it's safe everywhere.
 
-**The problem it solves:**
+## How it works
+
+`h()` uses **deferred escaping** - it doesn't escape immediately. Instead, it wraps the value in an `Html` object.
+
+Html objects are like DOM elements - they have a tag, attributes, and children. Children can be strings or other Html objects:
 
 ```php
-<!-- Using htmlspecialchars() - breaks with Html objects -->
-<span><?= htmlspecialchars($user->profileUrl ? a($user->profileUrl)->append($user->name) : $user->name) ?></span>
-<!-- Output: &lt;a href="/profile/123"&gt;John&lt;/a&gt; (broken) -->
+use Coroq\Html\Html;
 
-<!-- Using h() - works with both strings and Html objects -->
-<span><?= h($user->profileUrl ? a($user->profileUrl)->append($user->name) : $user->name) ?></span>
-<!-- Output: <a href="/profile/123">John</a> (correct) -->
+$label = (new Html())->tag('strong')->append('Home');
+$link = (new Html())
+  ->tag('a')
+  ->attr('href', '/home')
+  ->addClass('nav-link')
+  ->append($label);  // Html as child
+
+echo $link;
+// Output: <a href="/home" class="nav-link"><strong>Home</strong></a>
 ```
 
-## Usage
-
-### Escaping in templates
+`h()` wraps the value in an Html object **without a tag**, just adding the value as a child:
 
 ```php
-use function Coroq\Html\h;
+$wrapped = h('text');  // Returns Html object with no tag, 'text' as child
+echo $wrapped;         // Output: text (escaped at render time)
+```
 
-<!-- Basic escaping -->
-<p><?= h($userInput) ?></p>
+**So you can call h() without worrying about double-escaping:**
 
-<!-- Works with any value -->
-<div><?= h($product->name) ?></div>
-<span><?= h($count) ?></span>
+```php
+echo h('&');           // Html wraps '&' → renders as &amp;
+echo h(h('&'));        // Html wraps Html → recognizes it's already Html → &amp;
+
+$link = (new Html())->tag('a')->attr('href', '/x');
+echo h($link);         // Html wraps Html → <a href="/x"></a>
+```
+
+At render time, string children are escaped, Html children render themselves.
+
+## Tag helpers
+
+Since `h()` returns an Html object, you can modify it. But creating elements with `new Html()` is verbose.
+
+We provide helpers to create Html objects more conveniently:
+
+```php
+use function Coroq\Html\{h, a, div, ul, li};
+
+// Instead of:
+$link = (new Html())->tag('a')->attr('href', '/home')->append('Home');
+
+// Use helpers:
+$link = a('/home')->append('Home');
+
+// Always wrap with h() when echoing:
+echo h($link);
 ```
 
 ### Conditional markup
 
-Add markup conditionally without breaking the template flow:
-
 ```php
 use function Coroq\Html\{h, a, span};
 
-<!-- Link usernames that have profiles -->
-<span><?= h($user->profileUrl ? a($user->profileUrl)->append($user->name) : $user->name) ?></span>
+<!-- Link if URL exists, otherwise plain text -->
+<span><?= h($user->url ? a($user->url)->append($user->name) : $user->name) ?></span>
 
 <!-- Highlight errors -->
 <td><?= h($hasError ? span()->addClass('error')->append($value) : $value) ?></td>
-
-<!-- Badge for special status -->
-<?= h($isPremium ? span()->addClass('badge')->append('Premium') : null) ?>
 ```
 
 ### Building elements
 
 ```php
-use function Coroq\Html\{div, span, a};
+use function Coroq\Html\{h, div, ul, li};
 
-$html = div()
-  ->addClass('container')
-  ->append(
-    span()->addClass('label')->append('Name:')
-  )
-  ->append(' ')
-  ->append(
-    a('/profile')->append($user->name)
-  );
+echo h(div()->addClass('card')->append($content));
 
-echo $html;
-// <div class="container"><span class="label">Name:</span> <a href="/profile">John</a></div>
-```
-
-### Lists and iteration
-
-```php
-use function Coroq\Html\{ul, li};
-
-$items = ['Apple', 'Banana', 'Orange'];
-
-echo ul()->each($items, fn($el, $item) =>
+echo h(ul()->each($items, fn($el, $item) =>
   $el->append(li()->append($item))
-);
+));
 ```
 
-### Conditional rendering
-
-```php
-$el = div()
-  ->append('Base content')
-  ->when($showExtra, fn($el) =>
-    $el->append(' Extra content')
-  );
-```
-
-### Select options
-
-```php
-use function Coroq\Html\{select, selectOptions};
-
-$options = ['us' => 'United States', 'uk' => 'United Kingdom'];
-
-echo select('country')->apply(selectOptions($options, 'uk'));
-```
-
-### Unsafe content
-
-By default, all content is escaped. Use `noEscape()` only for trusted HTML:
+### Trusted HTML
 
 ```php
 use function Coroq\Html\{h, noEscape};
 
-echo h('<script>alert("xss")</script>');
-// &lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;
-
 echo h(noEscape('<strong>bold</strong>'));
-// <strong>bold</strong>
 ```
 
-## Key features
+Never use `noEscape()` with user input.
 
-**No double-escaping**: `h()` is idempotent - safe to call multiple times on the same value.
+## Requirements
 
-**Unified interface**: Works with strings, Html objects, numbers, null - always returns safe output.
+- PHP 8.0 or higher
+- No dependencies
 
-**Auto-escaping**: All content is escaped by default unless explicitly marked with `noEscape()`.
+## Scope
 
-**Fluent interface**: Methods return `$this` for chaining.
+Does: HTML escaping, element generation, conditional markup
+Doesn't: Template engines, HTML parsing, DOM manipulation
 
-**Composition**: Use `apply()`, `when()`, `each()` with closures for flexible patterns.
+## Reference
 
-## What this library does
+### Core functions
 
-- Escape values safely in templates
-- Provide consistent interface for strings and Html objects
-- Generate HTML programmatically with fluent interface
-- Support conditional and iterative rendering
+- `h($content)` - escape content, safe to call multiple times
+- `noEscape($html)` - mark HTML as safe (dangerous with user input)
 
-## What this library does not do
+### Tag helpers
 
-- Template engines (use with your existing PHP templates)
-- HTML parsing or manipulation
-- DOM traversal or querying
-- CSS or JavaScript generation
+`div()`, `span()`, `a($href)`, `h1()`-`h6()`, `para()`, `ul()`, `ol()`, `li()`, `table()`, `tr()`, `th()`, `td()`, `form($action, $method)`, `input($type, $name)`, `select($name)`, `option($value, $label)`, `button($type)`, `label($for)`, `textarea($name)`, `img($src)`, `small()`, `br()`, `hr()`
 
-## Available helpers
+### Fluent methods
 
-**Core**: `h()` - wrap/escape content, `noEscape()` - mark content as safe (use with caution)
+- `->append($content)` - add content
+- `->attr($name, $value)` - set attribute
+- `->addClass($classes)` - add CSS classes
+- `->id($id)` - set id
+- `->when($condition, $callback)` - conditional modification
+- `->each($items, $callback)` - iterate and append
 
-**Tags**: `div()`, `span()`, `a()`, `h1()`-`h6()`, `para()`, `ul()`, `ol()`, `li()`, `table()`, `thead()`, `tbody()`, `tr()`, `th()`, `td()`, `form()`, `input()`, `select()`, `option()`, `button()`, `label()`, `textarea()`, `img()`, `iframe()`, `time()`, `br()`, `hr()`, `script()`, `small()`
+### Helper functions
 
-**Configuration**: `externalLink()`, `selectOptions()`, `scriptData()`
-
-**Deprecated**: `p()` - use `h()` instead
+- `selectOptions($options, $selected)` - populate select
+- `externalLink($url)` - external link with target and rel
+- `scriptData($name, $value)` - pass PHP data to JavaScript

@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed all properties in `Html` and `NoEscape` to private with type declarations
 - Improved helper functions with better parameter handling and conditional attributes
 
+### Deprecated
+- `p($html)` - Use `echo h($html)` instead
+
 ## [0.3.0] - 2025-11-02
 
 ### Breaking Changes

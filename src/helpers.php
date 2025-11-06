@@ -20,6 +20,7 @@ function h($html): Html
 
 /**
  * Echo Html content
+ * @deprecated Use echo h($html) instead
  * @param mixed $html
  * @return void
  */

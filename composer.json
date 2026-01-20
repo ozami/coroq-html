@@ -1,5 +1,7 @@
 {
     "name": "coroq/html",
+    "description": "HTML escaping for PHP templates",
+    "keywords": ["html", "escaping", "xss", "security"],
     "type": "library",
     "license": "MIT",
     "authors": [
